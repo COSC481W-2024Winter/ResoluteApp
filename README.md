@@ -40,6 +40,10 @@ A senior at Eastern Michigan, my degree is in Computer Science and I plan on gra
 
 I am a junior at EMU double majoring in Data Science and Political Science with plans to graduate in the winter of 2025. My career goal is to become a political analyist for an interest group or news network. My coding experience has all been through Eastern, so I have knowledge primarily in Java and Python. In my free time I enjoy reading, going to concerts, and hanging out with my cat.
 
+### Kailin Bedoway - Team Member
+
+I am an EMU senior majoring in Data Science and Analytics planning to graduate after this semester. I have gained all of my coding knowledge through my schooling, and have experience with languages including Python, Java, Javascript, HTML, CSS, R, and SQL. I am currently unsure of exactly what career path I will take after graduation, but I'm excited to explore the possibilities in the future!
+
 ### William Paddison - Team Member
 
 I am a senior at EMU with a major in Computer Science I plan to graduate at the end of this semester in April. I am currently working in the service industry and have career goals of finding a career where I am able to work in a sales position where I can utilized my knowledge of computers to connect people with the technology either physical or digital that improves there life or business. I am super excited for this last semester, I really enjoy getting to know and working with new people :)
