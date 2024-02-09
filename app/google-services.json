@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "581732056612",
+    "project_id": "resoluteapp-ce595",
+    "storage_bucket": "resoluteapp-ce595.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581732056612:android:fbe2a3f7757f87a14ae2b1",
+        "android_client_info": {
+          "package_name": "com.example.resoluteapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD86c9V1mG2spyML-dPW08Rd1VpnyHwDNo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
