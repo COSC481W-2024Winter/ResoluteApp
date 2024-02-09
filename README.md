@@ -10,7 +10,7 @@ The primary function of Resolute is to remind users to be physically active via 
     * src/main/res is the resources folder with more specified directories contained within.<br />
       * res/drawable holds image files for use in the application, such as backgrounds, icons, and logos.<br />
       * res/layout contains layout, or .xml, files that can be used in Android Studio for visually-focused designing of the application's UI on whole-screens, such as fragments or activities.<br /> 
-      * res/menu also contains layout .xml files, but is specifically for menus used accesible from multiple screens in the application.<br /> 
+      * res/menu also contains layout .xml files, but is specifically for menus used accessible from multiple screens in the application.<br /> 
       * res/mipmap* encompasses multiple file formats for the project's home-screen icons for various Android operating system UI schemes.<br />
       * res/navigation contains navigation layout files. For this project, that is primarily "nav_graph.xml", which directs navigation by associating actions with destination fragments and/or activities.
       * res/values contains .xml files for greater organization of multi-use values across the application such as strings (strings.xml) and color definitions (colors.xml).<br />
@@ -21,11 +21,11 @@ The primary function of Resolute is to remind users to be physically active via 
 
 ## Setup Instructions
 **Programming languages -** Java version 1.8 (A.K.A Java JDK 8), XML 1.1 (default)<br />
-**Dependancies -** Written using Android Studio Hedgehog (Version 2023.1.1) for devices running Android API 26 ("Oreo"; Android 8.0) or any later Android API. <br />
+**Dependencies -** Written using Android Studio Hedgehog (Version 2023.1.1) for devices running Android API 26 ("Oreo"; Android 8.0) or any later Android API. <br />
 **Setup instructions -** 
  * Download Android Studio at https://developer.android.com/studio?gclid=Cj0KCQiAwvKtBhDrARIsAJj-kTietQJlTcLGuP-ZfoUrNfgJU6WJgMoxkebWq8Pgt5XsD34Z0iMi6psaArebEALw_wcB&gclsrc=aw.ds.
  * After installing and opening Android Studio select "Get from VCS" on the main menu.
- * Here on GitHub, copy the clone URL from the "code" menu, and paste this URL in the "URL" textbox in Android Studio.
+ * Here on GitHub, copy the clone URL from the "code" menu, and paste this URL in the "URL" text box in Android Studio.
  * Select "Clone" and wait for Gradle setup to complete.
  * Using either a virtual device located under Tools -> Device Manager in Android Studio, or by connecting a physical device via USB and enabling developer options on that device, selecting either the play button at the top of the window or Run -> Run 'app' the application will be compiled, installed, and opened on the device of choice. 
 
