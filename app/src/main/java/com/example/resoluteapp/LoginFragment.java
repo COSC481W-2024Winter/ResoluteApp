@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,23 @@ import android.widget.Toast;
 
 import com.example.resoluteapp.databinding.FragmentFirstBinding;
 import com.example.resoluteapp.databinding.FragmentLoginBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
+
+    //Initialize the database object in fragment
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    //Create tag for Error reporting in Logcat
+    private static final String TAG = "MainActivity";
 
     @Override
     public View onCreateView(
@@ -47,20 +60,36 @@ public class LoginFragment extends Fragment {
                 String usernameString = usernameET.getText().toString();
                 String passwordString = passwordET.getText().toString();
 
-                //TESTING CODE START FOR COMMIT
-                int duration = Toast.LENGTH_SHORT;
+                //Search "users" for matching username
+                db.collection("users")
+                        .whereEqualTo("username", usernameString)
+                        .whereEqualTo("password", passwordString)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    //Only 1 user exists with entered username and password match
+                                    if(task.getResult().size() == 1) {
+                                        //Show Toast informing of valid username/password
+                                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Logging in", Toast.LENGTH_SHORT);
+                                        toast.show();
 
-                Toast toast1 = Toast.makeText(getActivity().getApplicationContext(), "Username is: "+usernameString, duration);
-                toast1.show();
-
-                Toast toast2 = Toast.makeText(getActivity().getApplicationContext(), "Password is: "+passwordString, duration);
-                toast2.show();
-
-                //TESTING CODE END FOR COMMIT
-
-                //Navigate to home screen
-                NavHostFragment.findNavController(LoginFragment.this)
-                        .navigate(R.id.action_loginFragment_to_homeFragment);
+                                        //Navigate to home screen
+                                        NavHostFragment.findNavController(LoginFragment.this)
+                                                .navigate(R.id.action_loginFragment_to_homeFragment);
+                                    }
+                                    //If there isn't exactly one match, login fails
+                                    else{
+                                        //Show Toast informing of invalid username/password
+                                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Invalid Username or Password", Toast.LENGTH_LONG);
+                                        toast.show();
+                                    }
+                                } else {
+                                    Log.d(TAG, "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
             }
         });
 
