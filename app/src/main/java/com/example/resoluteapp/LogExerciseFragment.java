@@ -1,18 +1,17 @@
 package com.example.resoluteapp;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.resoluteapp.databinding.FragmentLogExerciseBinding;
-import com.example.resoluteapp.databinding.FragmentLoginBinding;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +20,7 @@ import com.example.resoluteapp.databinding.FragmentLoginBinding;
  */
 public class LogExerciseFragment extends Fragment {
     private FragmentLogExerciseBinding binding;
+    private FirebaseFirestore theDB;
 
     @Override
     public View onCreateView(
@@ -35,6 +35,8 @@ public class LogExerciseFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        theDB = FirebaseFirestore.getInstance();
 
         //Log Exercise Button
         binding.logExerciseButton.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +56,14 @@ public class LogExerciseFragment extends Fragment {
             }
         });
     }
+
+    private void logExercise() {
+
+
+
+    }
+
+
 
     @Override
     public void onDestroyView() {
