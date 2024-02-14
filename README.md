@@ -53,4 +53,4 @@ I am a senior at EMU with a major in Computer Science I plan to graduate at the 
 
 ### Albaraa Omian - Team Member
 
-(Please update member's description)
+I am a Senior at EMU and majoring in computer Science and plan in graduating this spring. I am currently workinging in the industry as an entry level IT Technician and hopefully want to continue my growth in this feild. I have knowlege in C++ and Xcode. Im excited to learn something new in this project and working with my group.
