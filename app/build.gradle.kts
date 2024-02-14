@@ -52,5 +52,4 @@ dependencies {
     implementation ("com.google.firebase:firebase-firestore-ktx:24.10.2")
     implementation ("com.google.firebase:firebase-firestore:24.10.2")
 
-
 }

@@ -16,12 +16,12 @@
 
     <EditText
         android:id="@+id/editTextExercise"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
         android:layout_marginStart="50dp"
         android:layout_marginTop="-100dp"
         android:layout_marginBottom="-100dp"
-        android:hint="Field 1"
+        android:hint="Exercise"
         app:layout_constraintBottom_toTopOf="@+id/log_exercise_button"
         app:layout_constraintEnd_toStartOf="@+id/editTextUnits"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,13 +29,13 @@
 
     <EditText
         android:id="@+id/editTextUnits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
         android:layout_marginStart="50dp"
         android:layout_marginTop="-100dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="-100dp"
-        android:hint="Field 2"
+        android:hint="Units"
         app:layout_constraintBottom_toTopOf="@+id/log_exercise_button"
         app:layout_constraintEnd_toStartOf="@+id/editTextNumberOfUnits"
         app:layout_constraintStart_toEndOf="@+id/editTextExercise"
@@ -44,12 +44,12 @@
 
     <EditText
         android:id="@+id/editTextNumberOfUnits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
         android:layout_marginTop="-100dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="-100dp"
-        android:hint="Field 3"
+        android:hint="Amount"
         app:layout_constraintBottom_toTopOf="@+id/log_exercise_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -57,6 +57,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.503" />
 
+    <!-- Discard Button -->
     <Button
         android:id="@+id/log_exercise_button"
         android:layout_width="wrap_content"
@@ -64,14 +65,16 @@
         android:text="Log Exercise"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.613" />
 
-    <!-- Discard Button -->
     <Button
         android:id="@+id/to_home_from_log_exercise"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#E40D0D"
         android:text="Discard (Back to Home)"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
