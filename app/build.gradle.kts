@@ -50,5 +50,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation ("com.google.firebase:firebase-firestore-ktx:24.10.2")
+    implementation ("com.google.firebase:firebase-firestore:24.10.2")
+
 
 }
