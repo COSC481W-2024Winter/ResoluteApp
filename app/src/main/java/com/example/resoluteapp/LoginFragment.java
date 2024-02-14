@@ -72,8 +72,32 @@ public class LoginFragment extends Fragment {
                                     //Only 1 user exists with entered username and password match
                                     if(task.getResult().size() == 1) {
                                         //Show Toast informing of valid username/password
-                                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Logging in", Toast.LENGTH_SHORT);
+                                        Toast toast = Toast.makeText(
+                                                getActivity().getApplicationContext(), "Logging in", Toast.LENGTH_SHORT
+                                        );
                                         toast.show();
+
+                                        //Set username and password in SharedPreferences
+                                        ((MainActivity)getActivity()).setUsernameAndPassword(
+                                                usernameString, passwordString
+                                        );
+
+                                        //-----------TESTING CODE START-----------------------------
+                                        //Test shared preferences by displaying a Toast message
+                                        //containing username/password retrieved from SharedPreferences
+                                        String savedUser = ((MainActivity)getActivity()).getUsername();
+                                        String savedPass = ((MainActivity)getActivity()).getPassword();
+
+                                        Toast spToast1 = Toast.makeText(
+                                                getActivity().getApplicationContext(), "Username is: "+savedUser, Toast.LENGTH_SHORT
+                                        );
+                                        spToast1.show();
+
+                                        Toast spToast2 = Toast.makeText(
+                                                getActivity().getApplicationContext(), "Password is: "+savedPass, Toast.LENGTH_SHORT
+                                        );
+                                        spToast2.show();
+                                        //-----------TESTING CODE END-----------------------------
 
                                         //Navigate to home screen
                                         NavHostFragment.findNavController(LoginFragment.this)
