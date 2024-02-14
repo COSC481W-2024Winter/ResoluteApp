@@ -1,5 +1,7 @@
 package com.example.resoluteapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -72,6 +74,30 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }*/
+
+    //Function to store username and password values in SharedPreferences
+        //Call tis from fragment with ((MainActivity)getActivity()).setUsernameAndPassword(STRING);
+    public void setUsernameAndPassword(String un, String pw){
+        SharedPreferences sp = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("username", un);
+        editor.putString("password", pw);
+        editor.apply();
+    }
+
+    //Function to retrieve username from SharedPreferences
+        //Call this function from Fragment with "((MainActivity)getActivity()).getUsername();"
+    public String getUsername(){
+        SharedPreferences sp = this.getPreferences(Context.MODE_PRIVATE);
+        return sp.getString("username", "DEF USERNAME. BUG! REPORT!");
+    }
+
+    //Function to retrieve password from SharedPreferences
+        //Call this function from Fragment with "((MainActivity)getActivity()).getPassword();"
+    public String getPassword(){
+        SharedPreferences sp = this.getPreferences(Context.MODE_PRIVATE);
+        return sp.getString("password", "DEF PASSWORD. BUG! REPORT!");
+    }
 
     @Override
     public boolean onSupportNavigateUp() {

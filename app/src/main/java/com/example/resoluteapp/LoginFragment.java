@@ -72,8 +72,15 @@ public class LoginFragment extends Fragment {
                                     //Only 1 user exists with entered username and password match
                                     if(task.getResult().size() == 1) {
                                         //Show Toast informing of valid username/password
-                                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Logging in", Toast.LENGTH_SHORT);
+                                        Toast toast = Toast.makeText(
+                                                getActivity().getApplicationContext(), "Logging in", Toast.LENGTH_SHORT
+                                        );
                                         toast.show();
+
+                                        //Set username and password in SharedPreferences
+                                        ((MainActivity)getActivity()).setUsernameAndPassword(
+                                                usernameString, passwordString
+                                        );
 
                                         //Navigate to home screen
                                         NavHostFragment.findNavController(LoginFragment.this)
