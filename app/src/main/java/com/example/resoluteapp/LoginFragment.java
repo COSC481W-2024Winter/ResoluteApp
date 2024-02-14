@@ -82,23 +82,6 @@ public class LoginFragment extends Fragment {
                                                 usernameString, passwordString
                                         );
 
-                                        //-----------TESTING CODE START-----------------------------
-                                        //Test shared preferences by displaying a Toast message
-                                        //containing username/password retrieved from SharedPreferences
-                                        String savedUser = ((MainActivity)getActivity()).getUsername();
-                                        String savedPass = ((MainActivity)getActivity()).getPassword();
-
-                                        Toast spToast1 = Toast.makeText(
-                                                getActivity().getApplicationContext(), "Username is: "+savedUser, Toast.LENGTH_SHORT
-                                        );
-                                        spToast1.show();
-
-                                        Toast spToast2 = Toast.makeText(
-                                                getActivity().getApplicationContext(), "Password is: "+savedPass, Toast.LENGTH_SHORT
-                                        );
-                                        spToast2.show();
-                                        //-----------TESTING CODE END-----------------------------
-
                                         //Navigate to home screen
                                         NavHostFragment.findNavController(LoginFragment.this)
                                                 .navigate(R.id.action_loginFragment_to_homeFragment);
