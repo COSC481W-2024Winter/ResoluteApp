@@ -16,6 +16,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.resoluteapp.databinding.FragmentLogExerciseBinding;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +25,7 @@ import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link LogExerciseFragment#newInstance} factory method to
+ * Use the  factory method to
  * create an instance of this fragment.
  */
 public class LogExerciseFragment extends Fragment {
@@ -78,6 +80,9 @@ public class LogExerciseFragment extends Fragment {
         String units = binding.editTextUnits.getText().toString().trim();
         String numberOfUnits = binding.editTextNumberOfUnits.getText().toString().trim();
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String dateString = dateFormat.format(new Date(System.currentTimeMillis()));
+
         // Create a data object
         Map<String, Object> theExercise = new HashMap<>();
 
@@ -85,6 +90,7 @@ public class LogExerciseFragment extends Fragment {
         theExercise.put("Units", units);
         theExercise.put("Amount", numberOfUnits);
         theExercise.put("Date", Timestamp.now());
+        theExercise.put("Date_String", dateString);
 
         theDB.collection("exercises").add(theExercise).addOnSuccessListener(documentReference -> {
             // Log success
