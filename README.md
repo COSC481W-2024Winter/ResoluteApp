@@ -47,10 +47,6 @@ I am a junior at EMU double majoring in Data Science and Political Science with 
 
 I am an EMU senior majoring in Data Science and Analytics planning to graduate after this semester. I have gained all of my coding knowledge through my schooling, and have experience with languages including Python, Java, Javascript, HTML, CSS, R, and SQL. I am currently unsure of exactly what career path I will take after graduation, but I'm excited to explore the possibilities in the future!
 
-### William Paddison - Team Member
-
-I am a senior at EMU with a major in Computer Science I plan to graduate at the end of this semester in April. I am currently working in the service industry and have career goals of finding a career where I am able to work in a sales position where I can utilized my knowledge of computers to connect people with the technology either physical or digital that improves there life or business. I am super excited for this last semester, I really enjoy getting to know and working with new people :)
-
 ### Albaraa Omian - Team Member
 
 I am a Senior at EMU and majoring in computer Science and plan in graduating this spring. I am currently workinging in the industry as an entry level IT Technician and hopefully want to continue my growth in this feild. I have knowlege in C++ and Xcode. Im excited to learn something new in this project and working with my group.
