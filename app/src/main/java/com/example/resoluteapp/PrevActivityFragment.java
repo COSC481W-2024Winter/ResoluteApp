@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.resoluteapp.databinding.FragmentPrevActivityBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.collect.Table;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -74,7 +75,7 @@ public class PrevActivityFragment extends Fragment {
     public void fillTable() throws InterruptedException, ExecutionException {
 
         //indicates what collection to retrieve data from
-        DB.collection("victoria_exercises").get()
+        DB.collection("exercises").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -94,10 +95,10 @@ public class PrevActivityFragment extends Fragment {
                             //loops through all the documents in the list to fill the table
                             for (DocumentSnapshot d : list) {
                                 //puts each piece of data in the document into its own variable
-                                String date = d.getString("date");
-                                String exercise = d.getString("exercise");
-                                String amount = d.getString("amount");
-                                String unit = d.getString("unit");
+                                String date = d.getString("Date_String");
+                                String exercise = d.getString("Exercise");
+                                String amount = d.getString("Amount");
+                                String unit = d.getString("Units");
 
                                 //creates a new row for the exercise and 4 text views in the row
                                 TableRow tr = new TableRow(getActivity().getApplicationContext());

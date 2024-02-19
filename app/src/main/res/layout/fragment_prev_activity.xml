@@ -32,68 +32,81 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.941" />
 
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="359dp"
-        android:layout_height="513dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginBottom="21dp"
-        android:background="#B191EA"
-        android:stretchColumns="0,1,2,3"
-        app:layout_constraintBottom_toTopOf="@+id/to_home_from_previous_activity"
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="110dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/previous_activity_identifier">
+        app:layout_constraintTop_toTopOf="parent">
 
-
-        <TableRow
-            android:id="@+id/header_row"
-            android:layout_width="match_parent"
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#8956E5">
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="26dp"
+            android:layout_marginBottom="21dp"
+            android:background="#B191EA"
+            android:stretchColumns="0,1,2,3"
+            app:layout_constraintBottom_toTopOf="@+id/to_home_from_previous_activity"
+            app:layout_constraintTop_toBottomOf="@+id/previous_activity_identifier">
 
-            <TextView
-                android:id="@+id/date"
-                android:layout_column="0"
-                android:padding="10dip"
-                android:text="Date"
-                android:textColor="#040303" />
 
-            <TextView
-                android:id="@+id/exercise"
-                android:layout_column="1"
-                android:padding="10dip"
-                android:text="Exercise"
-                android:textColor="#040303" />
+            <TableRow
+                android:id="@+id/header_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#8956E5">
 
-            <TextView
-                android:id="@+id/amount"
-                android:layout_column="2"
-                android:padding="10dip"
-                android:text="Amount"
-                android:textColor="#020202" />
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_column="0"
+                    android:padding="10dip"
+                    android:text="Date"
+                    android:textColor="#040303" />
 
-            <TextView
-                android:id="@+id/unit"
-                android:layout_column="3"
-                android:padding="10dip"
-                android:text="Unit"
-                android:textColor="#020202" />
+                <TextView
+                    android:id="@+id/exercise"
+                    android:layout_column="1"
+                    android:padding="10dip"
+                    android:text="Exercise"
+                    android:textColor="#040303" />
 
-        </TableRow>
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_column="2"
+                    android:padding="10dip"
+                    android:text="Amount"
+                    android:textColor="#020202" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/unit"
+                    android:layout_column="3"
+                    android:padding="10dip"
+                    android:text="Unit"
+                    android:textColor="#020202" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableLayout>
+    </ScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
