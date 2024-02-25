@@ -5,6 +5,9 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="changeText_sameActivity()">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
