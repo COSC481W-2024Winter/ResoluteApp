@@ -1,19 +1,21 @@
 package com.example.resoluteapp;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.resoluteapp.databinding.FragmentSecondBinding;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-public class SecondFragment extends Fragment {
+import com.example.resoluteapp.databinding.FragmentFriendsBinding;
+import com.example.resoluteapp.databinding.FragmentRequestBinding;
 
-    private FragmentSecondBinding binding;
+public class RequestFragment extends Fragment {
+
+    private FragmentRequestBinding binding;
 
     @Override
     public View onCreateView(
@@ -21,7 +23,7 @@ public class SecondFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentSecondBinding.inflate(inflater, container, false);
+        binding = FragmentRequestBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -29,11 +31,12 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
+        //Return to Friends List Button
+        binding.toFriendsFromRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);*/
+                NavHostFragment.findNavController(RequestFragment.this)
+                        .navigate(R.id.action_requestFragment_to_friendsFragment);
             }
         });
     }
@@ -43,5 +46,4 @@ public class SecondFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }
