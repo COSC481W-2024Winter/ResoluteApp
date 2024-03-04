@@ -126,6 +126,15 @@ public class FriendsFragment extends Fragment {
             }
         });
 
+        //To Friend Requests Button
+        binding.toRequestFromFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(FriendsFragment.this)
+                        .navigate(R.id.action_friendsFragment_to_requestFragment);
+            }
+        });
+
         //Home Button
         binding.toHomeFromFriends.setOnClickListener(new View.OnClickListener() {
             @Override
