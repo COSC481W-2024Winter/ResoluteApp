@@ -10,19 +10,71 @@
         android:id="@+id/to_friends_from_request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:text="@string/return_to_friends_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
-    <TextView
-        android:id="@+id/request_fragment_identifier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/friend_requests_page"
-        app:layout_constraintBottom_toTopOf="@+id/to_friends_from_request"
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="110dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableLayout
+            android:id="@+id/requestTable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="26dp"
+            android:layout_marginBottom="21dp"
+            android:background="#B191EA"
+            android:stretchColumns="0,1,2"
+            app:layout_constraintBottom_toTopOf="@+id/to_home_from_previous_activity"
+            app:layout_constraintTop_toBottomOf="@+id/previous_activity_identifier">
+
+            <TableRow
+                android:id="@+id/header_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#8956E5">
+
+                <TextView
+                    android:id="@+id/requestUsername"
+                    android:padding="10dip"
+                    android:text="@string/username"
+                    android:textColor="#040303" />
+
+                <TextView
+                    android:id="@+id/approveRequest"
+                    android:padding="10dip"
+                    android:text="@string/approve"
+                    android:textColor="#020202" />
+
+                <TextView
+                    android:id="@+id/denyRequest"
+                    android:padding="10dip"
+                    android:text="@string/deny"
+                    android:textColor="#020202" />
+
+            </TableRow>
+
+        </TableLayout>
+
+
+    </ScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
