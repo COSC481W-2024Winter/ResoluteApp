@@ -39,7 +39,7 @@ public class RequestFragment extends Fragment {
 
         binding = FragmentRequestBinding.inflate(inflater, container, false);
 
-        getUsername();
+        populateTable();
 
 
         return binding.getRoot();
@@ -61,7 +61,7 @@ public class RequestFragment extends Fragment {
         });
     }
 
-    public void getUsername() {
+    public void populateTable() {
 
         // Get Username from Shared Preferences
         String savedUser = ((MainActivity) getActivity()).getUsername();
@@ -111,6 +111,14 @@ public class RequestFragment extends Fragment {
                             approveButton.setWidth(columnWidth);
                             newRow.addView(approveButton);
 
+                            // Add onClick listeners for button
+                            approveButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // Handle approve button click here
+                                }
+                            });
+
                             // Button for deny
                             Button denyButton = new Button(getActivity().getApplicationContext());
                             denyButton.setText(R.string.deny);
@@ -119,6 +127,25 @@ public class RequestFragment extends Fragment {
                             denyButton.setPadding(10, 10, 10, 10);
                             denyButton.setWidth(columnWidth);
                             newRow.addView(denyButton);
+
+                            // Add onClick listeners for button
+                            denyButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    // Deletes the ONE document that exists for a user THERES A PROBLEM HERE
+                                    // a user can send multiple friend requests
+                                    theDocument.getReference().delete();
+
+                                    // Remove the TableRow from the TableLayout
+                                    // Grab the most recent view (button touched) a rows parent (table)
+                                    // use the table to remove a view associated with it ... the row touched.
+                                    ViewGroup parentView = (ViewGroup) newRow.getParent();
+                                    parentView.removeView(newRow);
+
+
+                                }
+                            });
 
                             theTable.addView(newRow);
 
