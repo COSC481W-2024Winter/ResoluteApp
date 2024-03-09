@@ -47,4 +47,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="friend_requests_page">Friend Requests page</string>
     <string name="return_to_friends_list">Return to friends list</string>
+    <string name="approve">Approve</string>
+    <string name="deny">Deny</string>
+    <string name="username">Username</string>
 </resources>
