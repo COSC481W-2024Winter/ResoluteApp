@@ -73,6 +73,9 @@ public class RegisterFragment extends Fragment {
                 String regEmailString = regEmailET.getText().toString();
                 String regPasswordString = regPasswordET.getText().toString();
 
+                //Hash(encrypt) password
+                String hashword = ((MainActivity)getActivity()).hashString(regPasswordString);
+
                 //Check that entered email contains "@"
                 if(!regEmailString.contains("@")){
                     //Show Toast informing of email requirements
@@ -103,7 +106,7 @@ public class RegisterFragment extends Fragment {
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         if(task.isSuccessful()) {
                                             //Attempt registration
-                                            registration(regUsernameString, regNameString, regEmailString, regPasswordString);
+                                            registration(regUsernameString, regNameString, regEmailString, hashword);
                                         } else {
                                             //Inform user they are offline, since the above test clearly failed
                                             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Connection failed", Toast.LENGTH_SHORT);
