@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,8 +21,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class RequestFragment extends Fragment {
 
@@ -66,6 +69,7 @@ public class RequestFragment extends Fragment {
         // Get Username from Shared Preferences
         String savedUser = ((MainActivity) getActivity()).getUsername();
         String usersFriendsCollection = "requests_" + savedUser;
+        String usersFriendsList = "friends_" + savedUser;
 
         // No Duplicate Requests
         HashSet<String> uniqueUsernames = new HashSet<>();
@@ -115,7 +119,36 @@ public class RequestFragment extends Fragment {
                             approveButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    // Handle approve button click here
+
+                                    // Create an Object with String Attributes
+                                    Map<String, Object> theFriend = new HashMap<>();
+                                    theFriend.put("username", requestingUser);
+
+                                    // Add that Friend to the Users Friend List
+                                    DB.collection(usersFriendsList).add(theFriend).addOnSuccessListener(documentReference -> {
+
+                                        // If the Write is Successful we'll know
+                                        Toast successfulAdd = Toast.makeText(requireActivity().getApplicationContext(), "Friend Added", Toast.LENGTH_SHORT);
+                                        successfulAdd.show();
+
+                                        // Remove the Row From the Table
+                                        ViewGroup parentView = (ViewGroup) newRow.getParent();
+                                        parentView.removeView(newRow);
+
+                                        // Remove the Request Document
+                                        theDocument.getReference().delete();
+
+
+                                    }).addOnFailureListener(e -> {
+
+                                        // If For Whatever reason the write couldnt happen. We'll Be Prompted.
+                                        Toast failureToAdd = Toast.makeText(requireActivity().getApplicationContext(), "Error With Friend Add", Toast.LENGTH_SHORT);
+                                        failureToAdd.show();
+
+
+                                    });
+
+
                                 }
                             });
 
@@ -142,7 +175,6 @@ public class RequestFragment extends Fragment {
                                     // use the table to remove a view associated with it ... the row touched.
                                     ViewGroup parentView = (ViewGroup) newRow.getParent();
                                     parentView.removeView(newRow);
-
 
                                 }
                             });
