@@ -10,14 +10,15 @@
         android:id="@+id/enter_username"
         android:layout_width="345dp"
         android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Enter a username"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/friends_identifier"
+        app:layout_constraintBottom_toTopOf="@id/send_request"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.135"
+        app:layout_constraintVertical_bias="0.051"
         tools:ignore="Autofill, LabelFor" />
 
     <Button
@@ -25,9 +26,77 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Send Request"
+        app:layout_constraintBottom_toTopOf="@id/to_request_from_friends"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enter_username" />
+
+    <Button
+        android:id="@+id/to_request_from_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="504dp"
+        android:text="Friend Requests"
+        app:layout_constraintBottom_toTopOf="@+id/to_inbox_from_friends"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/send_request" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableLayout
+            android:id="@+id/friends_table"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="26dp"
+            android:layout_marginBottom="21dp"
+            android:background="#B191EA"
+            android:stretchColumns="0"
+            app:layout_constraintBottom_toTopOf="@+id/to_home_from_previous_activity"
+            app:layout_constraintTop_toBottomOf="@+id/previous_activity_identifier">
+
+
+            <TableRow
+                android:id="@+id/header_row"
+                android:layout_width="wrap_content"
+                android:layout_height="3dp"
+                android:background="#6B49A7">
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_column="0"
+                    android:padding="0.03in"
+                    android:text="Friends"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/to_home_from_friends"
@@ -61,24 +130,4 @@
         app:layout_constraintStart_toEndOf="@+id/to_inbox_from_friends"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.976" />
-
-    <TextView
-        android:id="@+id/friends_identifier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Friends Screen"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/to_request_from_friends"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Friend Requests"
-        app:layout_constraintBottom_toTopOf="@+id/to_inbox_from_friends"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/friends_identifier" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     //Function to store username and password values in SharedPreferences
-        //Call tis from fragment with ((MainActivity)getActivity()).setUsernameAndPassword(STRING);
+    //Call this from fragment with ((MainActivity)getActivity()).setUsernameAndPassword(STRING);
     public void setUsernameAndPassword(String un, String pw){
         SharedPreferences sp = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -86,14 +86,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Function to retrieve username from SharedPreferences
-        //Call this function from Fragment with "((MainActivity)getActivity()).getUsername();"
+    //Call this function from fragment with "((MainActivity)getActivity()).getUsername();"
     public String getUsername(){
         SharedPreferences sp = this.getPreferences(Context.MODE_PRIVATE);
         return sp.getString("username", "DEF USERNAME. BUG! REPORT!");
     }
 
     //Function to retrieve password from SharedPreferences
-        //Call this function from Fragment with "((MainActivity)getActivity()).getPassword();"
+    //Call this function from fragment with "((MainActivity)getActivity()).getPassword();"
     public String getPassword(){
         SharedPreferences sp = this.getPreferences(Context.MODE_PRIVATE);
         return sp.getString("password", "DEF PASSWORD. BUG! REPORT!");
