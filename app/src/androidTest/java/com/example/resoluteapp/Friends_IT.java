@@ -28,7 +28,6 @@ public class Friends_IT {
 
     @Test
     public void invalidUsernameEntered() throws InterruptedException {
-
         onView(withId(R.id.login_username_entry)).perform(typeText("User1"), closeSoftKeyboard());
         onView(withId(R.id.login_password_entry)).perform(typeText("Password1"), closeSoftKeyboard());
 
@@ -44,16 +43,21 @@ public class Friends_IT {
         onView(withId(R.id.send_request)).perform(click());
 
         onView(withText("Username not found")).inRoot(not(isDialog())).check(matches(isDisplayed()));
-
     }
-
 
     @Test
-    public void aDifferentFriendsTest() {
+    public void generateFriendsTable() throws InterruptedException {
+        onView(withId(R.id.login_username_entry)).perform(typeText("User1"), closeSoftKeyboard());
+        onView(withId(R.id.login_password_entry)).perform(typeText("Password1"), closeSoftKeyboard());
 
+        onView(withId(R.id.login_button)).perform(click());
+
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_friends_from_home)).perform(click());
+
+        Thread.sleep(1000);
+
+        onView(withId(R.id.friends_table)).check(matches(isDisplayed()));
     }
-
-
 }
-
-
