@@ -7,6 +7,13 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static org.hamcrest.Matchers.allOf;
+
+import android.widget.TableLayout;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -48,5 +55,31 @@ public class Request_IT {
 
     }
 
+    @Test
+    public void testRowDeletionOnDeny() {
+
+        onView(withId(R.id.requestTable)).check(matches(isDisplayed()));
+
+        final int[] initialRowCount = new int[1];
+        onView(withId(R.id.requestTable)).check((view, noViewFoundException) -> {
+            TableLayout tableLayout = (TableLayout) view;
+            initialRowCount[0] = tableLayout.getChildCount() - 1; // Subtract header row
+        });
+
+        onView(allOf(withText(R.string.deny), isDisplayed())).perform(click());
+
+        onView(withId(R.id.requestTable)).check((view, noViewFoundException) -> {
+            TableLayout tableLayout = (TableLayout) view;
+            int rowCountAfterDenial = tableLayout.getChildCount() - 1; // Subtract header row
+            assert rowCountAfterDenial == initialRowCount[0] - 1;
+        });
+
+
+    }
+
+    @Test
+    public void testRowDeletionOnApprove() {
+
+    }
 
 }
