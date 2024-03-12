@@ -85,6 +85,9 @@ public class LogExerciseFragment extends Fragment {
 
     private void logExercise() {
 
+        //get the username of the user that is currently logged in
+        String currentUser = ((MainActivity)getActivity()).getUsername();;
+
         String exerciseName = binding.editTextExercise.getText().toString().trim();
         String units = binding.editTextUnits.getText().toString().trim();
         String numberOfUnits = binding.editTextNumberOfUnits.getText().toString().trim();
@@ -102,7 +105,7 @@ public class LogExerciseFragment extends Fragment {
         theExercise.put("Date", Timestamp.now());
         theExercise.put("Date_String", dateString);
 
-        theDB.collection("exercises").add(theExercise).addOnSuccessListener(documentReference -> {
+        theDB.collection("exercises_" + currentUser).add(theExercise).addOnSuccessListener(documentReference -> {
             // Log success
             Log.d(TAG, "Exercise logged with ID: " + documentReference.getId());
             Toast successMessage = Toast.makeText(requireActivity().getApplicationContext(), "Exercise Logged Successfully", Toast.LENGTH_SHORT);

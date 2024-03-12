@@ -82,18 +82,6 @@ public class FriendsFragment extends Fragment {
                                     data.put("sent", currentTime);
                                     data.put("username", sendingUsername);
 
-                                    //Add data to Firestore requests collection
-                                    DB.collection("requests")
-                                            .add(data)
-                                            .addOnSuccessListener(documentReference -> {
-                                                // Data addition successful
-                                                Log.d("Firestore", "Data added successfully");
-                                            })
-                                            .addOnFailureListener(e -> {
-                                                // Handle errors
-                                                Log.e("Firestore", "Error adding data: " + e.getMessage());
-                                            });
-
                                     //Add data to Firestore requests_[requestedUsername] collection
                                     DB.collection("requests_" + requestedUsername)
                                             .add(data)

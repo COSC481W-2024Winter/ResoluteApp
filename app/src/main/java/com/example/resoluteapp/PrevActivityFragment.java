@@ -74,8 +74,11 @@ public class PrevActivityFragment extends Fragment {
     //function to fill the table with data from exercise collection
     public void fillTable() throws InterruptedException, ExecutionException {
 
+        //get the username of the user currently logged in
+        String currentUser = ((MainActivity)getActivity()).getUsername();;
+
         //indicates what collection to retrieve data from
-        DB.collection("exercises").get()
+        DB.collection("exercises_" + currentUser).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
