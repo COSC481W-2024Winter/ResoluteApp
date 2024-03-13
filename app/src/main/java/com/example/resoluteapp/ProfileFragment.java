@@ -13,11 +13,6 @@ import android.view.ViewGroup;
 import com.example.resoluteapp.databinding.FragmentLoginBinding;
 import com.example.resoluteapp.databinding.FragmentProfileBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
@@ -40,6 +35,10 @@ public class ProfileFragment extends Fragment {
         binding.logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Clear SharedPreferences (this is effectively the "logout" taking place)
+                ((MainActivity)getActivity()).clearSharedPref();
+
+                //Navigate to LoginFragment
                 NavHostFragment.findNavController(ProfileFragment.this)
                         .navigate(R.id.action_profileFragment_to_loginFragment);
             }
@@ -67,6 +66,7 @@ public class ProfileFragment extends Fragment {
         binding.toHomeFromProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Navigate back to HomeFragment
                 NavHostFragment.findNavController(ProfileFragment.this)
                         .navigate(R.id.action_profileFragment_to_homeFragment);
             }

@@ -39,6 +39,13 @@ public class LoginFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
+        //Check if user is already logged in, and navigate to HomeFragment if true
+        if(((MainActivity)getActivity()).checkForUsername()){
+            //Navigate to home screen
+            NavHostFragment.findNavController(LoginFragment.this)
+                    .navigate(R.id.action_loginFragment_to_homeFragment);
+        }
+
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
