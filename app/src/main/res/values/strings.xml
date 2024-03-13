@@ -45,4 +45,10 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="exercise">Exercise</string>
+    <string name="units">Units</string>
+    <string name="amount">Amount</string>
+    <string name="log_exercise">Log Exercise</string>
+    <string name="clear_fields">Clear Fields</string>
+    <string name="back_to_home">Back To Home</string>
 </resources>

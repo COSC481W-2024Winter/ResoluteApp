@@ -2,6 +2,7 @@ package com.example.resoluteapp;
 
 import static android.content.ContentValues.TAG;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.resoluteapp.databinding.FragmentLogExerciseBinding;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -53,7 +55,14 @@ public class LogExerciseFragment extends Fragment {
                     Toast.makeText(requireActivity(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 }
             }
+        });
 
+        // Clear Fields Button
+        binding.clearFields.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearFields();
+            }
         });
 
         //Discard Button
@@ -76,10 +85,14 @@ public class LogExerciseFragment extends Fragment {
 
     private void logExercise() {
 
+        //get the username of the user that is currently logged in
+        String currentUser = ((MainActivity)getActivity()).getUsername();;
+
         String exerciseName = binding.editTextExercise.getText().toString().trim();
         String units = binding.editTextUnits.getText().toString().trim();
         String numberOfUnits = binding.editTextNumberOfUnits.getText().toString().trim();
 
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         String dateString = dateFormat.format(new Date(System.currentTimeMillis()));
 
@@ -92,7 +105,7 @@ public class LogExerciseFragment extends Fragment {
         theExercise.put("Date", Timestamp.now());
         theExercise.put("Date_String", dateString);
 
-        theDB.collection("exercises").add(theExercise).addOnSuccessListener(documentReference -> {
+        theDB.collection("exercises_" + currentUser).add(theExercise).addOnSuccessListener(documentReference -> {
             // Log success
             Log.d(TAG, "Exercise logged with ID: " + documentReference.getId());
             Toast successMessage = Toast.makeText(requireActivity().getApplicationContext(), "Exercise Logged Successfully", Toast.LENGTH_SHORT);
@@ -111,6 +124,13 @@ public class LogExerciseFragment extends Fragment {
             failureMessage.show();
         });
 
+    }
+
+    private void clearFields() {
+        // Clear EditText fields
+        binding.editTextExercise.setText("");
+        binding.editTextUnits.setText("");
+        binding.editTextNumberOfUnits.setText("");
     }
 
     @Override

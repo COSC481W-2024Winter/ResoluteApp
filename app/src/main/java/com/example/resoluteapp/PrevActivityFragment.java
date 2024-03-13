@@ -21,7 +21,6 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
@@ -75,12 +74,8 @@ public class PrevActivityFragment extends Fragment {
     //function to fill the table with data from exercise collection
     public void fillTable() throws InterruptedException, ExecutionException {
 
-        //creates a reference to the database collection exercises
-        CollectionReference exercisesRef = DB.collection("exercises");
-
         //indicates what collection to retrieve data from
-        //uses orderBy to sort the exercises by date and displays the most recent exercise at the top
-        exercisesRef.orderBy("Date", Query.Direction.DESCENDING).get()
+        DB.collection("exercises").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -99,7 +94,6 @@ public class PrevActivityFragment extends Fragment {
 
                             //loops through all the documents in the list to fill the table
                             for (DocumentSnapshot d : list) {
-
                                 //puts each piece of data in the document into its own variable
                                 String date = d.getString("Date_String");
                                 String exercise = d.getString("Exercise");
