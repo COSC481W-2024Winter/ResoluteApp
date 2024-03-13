@@ -27,7 +27,7 @@ public class Friends_IT {
     public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void invalidUsernameEntered() throws InterruptedException {
+    public void enterUsernameClears() throws InterruptedException {
         onView(withId(R.id.login_username_entry)).perform(typeText("User1"), closeSoftKeyboard());
         onView(withId(R.id.login_password_entry)).perform(typeText("Password1"), closeSoftKeyboard());
 
@@ -42,7 +42,7 @@ public class Friends_IT {
         onView(withId(R.id.enter_username)).perform(typeText("User10"), closeSoftKeyboard());
         onView(withId(R.id.send_request)).perform(click());
 
-        onView(withText("Username not found")).inRoot(not(isDialog())).check(matches(isDisplayed()));
+        onView(withId(R.id.enter_username)).check(matches(withText("")));
     }
 
     @Test
