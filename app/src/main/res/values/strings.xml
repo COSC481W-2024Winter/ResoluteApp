@@ -51,4 +51,6 @@
     <string name="log_exercise">Log Exercise</string>
     <string name="clear_fields">Clear Fields</string>
     <string name="back_to_home">Back To Home</string>
+    <string name="approve">Approve</string>
+    <string name="deny">Deny</string>
 </resources>
