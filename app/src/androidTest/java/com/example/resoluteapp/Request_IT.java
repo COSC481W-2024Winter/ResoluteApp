@@ -9,11 +9,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
 
+import android.widget.Button;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -57,25 +59,28 @@ public class Request_IT {
 
     @Test
     public void testRowDeletionOnDeny() {
-
+        // Ensure the table is displayed
         onView(withId(R.id.requestTable)).check(matches(isDisplayed()));
 
+        // Store the initial number of rows in the table
         final int[] initialRowCount = new int[1];
         onView(withId(R.id.requestTable)).check((view, noViewFoundException) -> {
             TableLayout tableLayout = (TableLayout) view;
-            initialRowCount[0] = tableLayout.getChildCount() - 1; // Subtract header row
+            // Assuming there is a header row that you want to exclude from the count
+            initialRowCount[0] = tableLayout.getChildCount() - 1;
         });
 
-        onView(allOf(withText(R.string.deny), isDisplayed())).perform(click());
+        // Specifically target the first visible "Deny" button that is a direct child of a TableRow
+        onView(allOf(withText(R.string.deny), withParent(instanceOf(TableRow.class)), instanceOf(Button.class), isDisplayed())).perform(click());
 
+        // Check if the row count decreased by 1 after clicking "Deny"
         onView(withId(R.id.requestTable)).check((view, noViewFoundException) -> {
             TableLayout tableLayout = (TableLayout) view;
-            int rowCountAfterDenial = tableLayout.getChildCount() - 1; // Subtract header row
-            assert rowCountAfterDenial == initialRowCount[0] - 1;
+            int rowCountAfterDenial = tableLayout.getChildCount() - 1; // Assuming there is a header row
+            assertEquals("Row should be deleted", initialRowCount[0] - 1, rowCountAfterDenial);
         });
-
-
     }
+
 
     @Test
     public void testRowDeletionOnApprove() {
