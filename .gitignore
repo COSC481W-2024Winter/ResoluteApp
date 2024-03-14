@@ -224,7 +224,7 @@ obj/
 .idea/jarRepositories.xml
 .idea/navEditor.xml
 .idea/deploymentTargetDropDown.xml
-
+.idea/androidTestResultsUserPreferences.xml
 
 # Legacy Eclipse project files
 .classpath

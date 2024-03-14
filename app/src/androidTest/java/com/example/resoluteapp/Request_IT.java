@@ -4,17 +4,16 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertEquals;
 
-import android.widget.Button;
-import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -39,7 +38,7 @@ public class Request_IT {
         onView(withId(R.id.login_username_entry)).perform(typeText("User1"), closeSoftKeyboard());
         onView(withId(R.id.login_password_entry)).perform(typeText("Password1"), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
-        // You may need to add a delay here if navigation is asynchronous
+
         Thread.sleep(1000);
         onView(withId(R.id.to_friends_from_home)).perform(click());
         Thread.sleep(1000);
@@ -60,31 +59,25 @@ public class Request_IT {
 
     @Test
     public void testRowDeletionOnDeny() {
-        // Ensure the table is displayed
-        onView(withId(R.id.requestTable)).check(matches(isDisplayed()));
 
-        // Store the initial number of rows in the table
-        final int[] initialRowCount = new int[1];
-        onView(withId(R.id.requestTable)).check((view, noViewFoundException) -> {
-            TableLayout tableLayout = (TableLayout) view;
-            // Assuming there is a header row that you want to exclude from the count
-            initialRowCount[0] = tableLayout.getChildCount() - 1;
-        });
+        onView(allOf(withText(R.string.deny), isDescendantOfA(allOf(instanceOf(TableRow.class), isDisplayed())),
+                hasSibling(withText("User20")), // Replace with First Row Username
+                isDisplayed()
+        )).perform(click());
 
-        // Specifically target the first visible "Deny" button that is a direct child of a TableRow
-        onView(allOf(withText(R.string.deny), withParent(instanceOf(TableRow.class)), instanceOf(Button.class), isDisplayed())).perform(click());
-
-        // Check if the row count decreased by 1 after clicking "Deny"
-        onView(withId(R.id.requestTable)).check((view, noViewFoundException) -> {
-            TableLayout tableLayout = (TableLayout) view;
-            int rowCountAfterDenial = tableLayout.getChildCount() - 1; // Assuming there is a header row
-            assertEquals("Row should be deleted", initialRowCount[0] - 1, rowCountAfterDenial);
-        });
+        onView(withText("User20")).check(doesNotExist());
     }
 
 
     @Test
     public void testRowDeletionOnApprove() {
+
+        onView(allOf(withText(R.string.approve), isDescendantOfA(allOf(instanceOf(TableRow.class), isDisplayed())),
+                hasSibling(withText("User30")), // Replace with First Row Username
+                isDisplayed()
+        )).perform(click());
+
+        onView(withText("User30")).check(doesNotExist());
 
     }
 
