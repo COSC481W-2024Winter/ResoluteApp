@@ -21,6 +21,9 @@ import com.example.resoluteapp.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
@@ -97,6 +100,30 @@ public class MainActivity extends AppCompatActivity {
     public String getPassword(){
         SharedPreferences sp = this.getPreferences(Context.MODE_PRIVATE);
         return sp.getString("password", "DEF PASSWORD. BUG! REPORT!");
+    }
+
+    //Function to hash(encrypt) String
+        //Call this function from Fragment with "((MainActivity)getActivity()).hashString(STRING);"
+    public String hashString(String s){
+        try {
+            //Define imported hashing algorithm and hash String s
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            messageDigest.update(s.getBytes());
+
+            byte[] result = messageDigest.digest(); //Byte array of hashed String
+
+            //Rebuild byte array as hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            for(byte b: result){
+                sb.append(String.format("%02x", b));
+            }
+
+            return sb.toString(); //Return statement if hash is successful
+        } catch (NoSuchAlgorithmException exception){
+            exception.printStackTrace();
+        }
+        //Failure case
+        return "Failure to Hash";
     }
 
     @Override
