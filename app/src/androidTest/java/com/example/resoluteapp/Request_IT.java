@@ -55,6 +55,7 @@ public class Request_IT {
         Thread.sleep(1000);
         onView(withId(R.id.friends_identifier)).check(matches(isDisplayed()));
 
+
     }
 
     @Test
