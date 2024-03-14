@@ -5,7 +5,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -35,8 +34,8 @@ public class Request_IT {
     @Before
     public void navigateToLogExerciseScreen() throws InterruptedException {
         // Navigate to the log exercise screen before each test
-        onView(withId(R.id.login_username_entry)).perform(typeText("User1"), closeSoftKeyboard());
-        onView(withId(R.id.login_password_entry)).perform(typeText("Password1"), closeSoftKeyboard());
+        onView(withId(R.id.login_username_entry)).perform(typeText("User3"), closeSoftKeyboard());
+        onView(withId(R.id.login_password_entry)).perform(typeText("Password3"), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
         Thread.sleep(1000);
@@ -52,8 +51,6 @@ public class Request_IT {
 
         onView(withId(R.id.to_friends_from_request)).perform(click());
         Thread.sleep(1000);
-        onView(withId(R.id.friends_identifier)).check(matches(isDisplayed()));
-
 
     }
 

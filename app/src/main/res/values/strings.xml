@@ -53,4 +53,6 @@
     <string name="back_to_home">Back To Home</string>
     <string name="approve">Approve</string>
     <string name="deny">Deny</string>
+    <string name="return_to_friends_list">Return To Friends List</string>
+    <string name="username">Username</string>
 </resources>
