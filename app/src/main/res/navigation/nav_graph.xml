@@ -96,6 +96,9 @@
         <action
             android:id="@+id/action_inboxFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_inboxFragment_self"
+            app:destination="@id/inboxFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
