@@ -21,6 +21,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
@@ -74,8 +75,14 @@ public class PrevActivityFragment extends Fragment {
     //function to fill the table with data from exercise collection
     public void fillTable() throws InterruptedException, ExecutionException {
 
-        //indicates what collection to retrieve data from
-        DB.collection("exercises").get()
+        //get the username of the user that is currently logged in
+        String currentUser = ((MainActivity)getActivity()).getUsername();
+
+        //creates a reference to the database collection exercises
+        CollectionReference exercisesRef = DB.collection("exercises_" + currentUser);
+
+        //uses orderBy to sort the exercises by date and displays the most recent exercise at the top
+        exercisesRef.orderBy("Date", Query.Direction.DESCENDING).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -106,6 +113,7 @@ public class PrevActivityFragment extends Fragment {
                                 TextView tv2 = new TextView(getActivity().getApplicationContext());
                                 TextView tv3 = new TextView(getActivity().getApplicationContext());
                                 TextView tv4 = new TextView(getActivity().getApplicationContext());
+
 
                                 //sets the first text view with the date data for the exercise
                                 tv1.setText(date);
