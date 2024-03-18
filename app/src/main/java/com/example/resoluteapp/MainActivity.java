@@ -21,6 +21,9 @@ import com.example.resoluteapp.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     //Function to store username and password values in SharedPreferences
-        //Call tis from fragment with ((MainActivity)getActivity()).setUsernameAndPassword(STRING);
+    //Call this from fragment with ((MainActivity)getActivity()).setUsernameAndPassword(STRING);
     public void setUsernameAndPassword(String un, String pw){
         SharedPreferences sp = this.getSharedPreferences("com.example.ResoluteApp.SharedPrefs",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -86,18 +89,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Function to retrieve username from SharedPreferences
-        //Call this function from Fragment with "((MainActivity)getActivity()).getUsername();"
+    //Call this function from fragment with "((MainActivity)getActivity()).getUsername();"
     public String getUsername(){
         SharedPreferences sp = this.getSharedPreferences("com.example.ResoluteApp.SharedPrefs",Context.MODE_PRIVATE);
         return sp.getString("username", "DEF USERNAME. BUG! REPORT!");
     }
 
     //Function to retrieve password from SharedPreferences
-        //Call this function from Fragment with "((MainActivity)getActivity()).getPassword();"
+    //Call this function from fragment with "((MainActivity)getActivity()).getPassword();"
     public String getPassword(){
         SharedPreferences sp = this.getSharedPreferences("com.example.ResoluteApp.SharedPrefs",Context.MODE_PRIVATE);
         return sp.getString("password", "DEF PASSWORD. BUG! REPORT!");
     }
+
 
     //Function to check for the existence of a Username in SharedPreferences
         //Call this function from Fragment with "((MainActivity)getActivity()).checkForUsername();"
@@ -112,6 +116,31 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = this.getSharedPreferences("com.example.ResoluteApp.SharedPrefs",Context.MODE_PRIVATE);
         sp.edit().remove("username").apply();
         sp.edit().remove("password").apply();
+    }
+  
+    //Function to hash(encrypt) String
+    //Call this function from Fragment with "((MainActivity)getActivity()).hashString(STRING);"
+    public String hashString(String s){
+        try {
+            //Define imported hashing algorithm and hash String s
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            messageDigest.update(s.getBytes());
+
+            byte[] result = messageDigest.digest(); //Byte array of hashed String
+
+            //Rebuild byte array as hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            for(byte b: result){
+                sb.append(String.format("%02x", b));
+            }
+
+            return sb.toString(); //Return statement if hash is successful
+        } catch (NoSuchAlgorithmException exception){
+            exception.printStackTrace();
+        }
+        //Failure case
+        return "Failure to Hash";
+
     }
 
     @Override

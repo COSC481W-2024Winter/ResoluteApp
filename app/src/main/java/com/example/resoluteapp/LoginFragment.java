@@ -66,10 +66,13 @@ public class LoginFragment extends Fragment {
                 String usernameString = usernameET.getText().toString();
                 String passwordString = passwordET.getText().toString();
 
+                //Hash(encrypt) password
+                String hashword = ((MainActivity)getActivity()).hashString(passwordString);
+
                 //Search "users" for matching username
                 db.collection("users")
                         .whereEqualTo("username", usernameString)
-                        .whereEqualTo("password", passwordString)
+                        .whereEqualTo("password", hashword)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -85,7 +88,7 @@ public class LoginFragment extends Fragment {
 
                                         //Set username and password in SharedPreferences
                                         ((MainActivity)getActivity()).setUsernameAndPassword(
-                                                usernameString, passwordString
+                                                usernameString, hashword
                                         );
 
                                         //Navigate to home screen
