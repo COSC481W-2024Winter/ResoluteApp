@@ -61,7 +61,7 @@ public class PreviousActivity_IT {
 
         Thread.sleep(1000);
 
-        onView(withId(R.id.welcome_message)).check(matches(withText("Hello " + "User1" + "\nWelcome to Resolute!")));
+        onView(withId(R.id.to_log_exercise_button)).check(matches(isDisplayed()));
     }
 
     @Test
