@@ -15,11 +15,6 @@ import com.example.resoluteapp.databinding.FragmentHomeBinding;
 
 import org.w3c.dom.Text;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
