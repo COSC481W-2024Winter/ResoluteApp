@@ -9,13 +9,19 @@ import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 import static org.hamcrest.CoreMatchers.not;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,12 +46,29 @@ public class LogExercise_IT {
         Thread.sleep(1000);
     }
 
+    //This function clears the SharedPreferences file before and after every test
+    @Before
+    @After
+    public void emptySharedPref(){
+        SharedPreferences sp = getInstrumentation().getTargetContext().getSharedPreferences("com.example.ResoluteApp.SharedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear();
+        editor.commit();
+    }
+
     @Test
     public void blankFieldsTest() throws InterruptedException {
-        // Test blank fields scenario
+        //Fill only "Exercise" and "Units" fields
+        onView(withId(R.id.editTextExercise)).perform(typeText("AutoTestExercise"));
+        onView(withId(R.id.editTextUnits)).perform(typeText("AutoTestUnits"));
+
+        //Clicking "Log exercise" shouldn't clear these fields, since there isn't an amount
         onView(withId(R.id.log_exercise_button)).perform(click());
         Thread.sleep(1000);
-        onView(withText("Please fill in all fields")).inRoot(not(isDialog())).check(matches(isDisplayed()));
+
+        //Check if "Exercise" and "Units" fields are still filled, meaning log failed due to empty field
+        onView(withId(R.id.editTextExercise)).check(matches(withText("AutoTestExercise")));
+        onView(withId(R.id.editTextUnits)).check(matches(withText("AutoTestUnits")));
     }
 
     @Test
