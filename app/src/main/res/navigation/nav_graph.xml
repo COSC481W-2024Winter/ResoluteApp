@@ -81,6 +81,9 @@
         <action
             android:id="@+id/action_friendsFragment_to_requestFragment"
             app:destination="@id/requestFragment" />
+        <action
+            android:id="@+id/action_friendsFragment_self"
+            app:destination="@id/friendsFragment" />
     </fragment>
     <fragment
         android:id="@+id/inboxFragment"
