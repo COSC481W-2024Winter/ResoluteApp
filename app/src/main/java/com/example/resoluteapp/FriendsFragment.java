@@ -85,7 +85,7 @@ public class FriendsFragment extends Fragment {
                 //Get requested user
                 EditText enteredUsername = (EditText)getActivity().findViewById(R.id.enter_username);
                 String requestedUsername = enteredUsername.getText().toString();
-
+                              
                 //If user enters their own username, do not send request
                 if (sendingUsername.equals(requestedUsername)) {
                     //Show "Cannot request yourself" Toast
