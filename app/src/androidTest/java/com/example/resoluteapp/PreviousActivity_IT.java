@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -75,8 +76,30 @@ public class PreviousActivity_IT {
 
     @Test
     public void currentUserTest() throws InterruptedException{
+        onView(withId(R.id.to_home_from_previous_activity)).perform(click());
+        Thread.sleep(1000);
 
+        onView(withId(R.id.to_log_exercise_button)).perform(click());
+        Thread.sleep(1000);
 
+        onView(withId(R.id.editTextExercise)).perform(typeText("dummy_test_exercise"));
+        onView(withId(R.id.editTextUnits)).perform(typeText("AutoTestUnits"));
+        onView(withId(R.id.editTextNumberOfUnits)).perform(typeText("AutoTestAmount"), closeSoftKeyboard());
+
+        onView(withId(R.id.log_exercise_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_home_from_log_exercise)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_previous_activity_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.tableLayout)).check(matches(isDisplayed()));
+
+        onView(allOf(withText("dummy_test_exercise"))).perform(click());
+
+        onView(allOf(withText("stupid_exercise"))).check(doesNotExist());
 
     }
 
