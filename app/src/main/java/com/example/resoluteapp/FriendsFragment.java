@@ -1,5 +1,9 @@
 package com.example.resoluteapp;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -18,10 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.resoluteapp.databinding.FragmentFriendsBinding;
-import com.example.resoluteapp.databinding.FragmentProfileBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,11 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FriendsFragment newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FriendsFragment extends Fragment {
 
     private FragmentFriendsBinding binding;
@@ -80,7 +80,7 @@ public class FriendsFragment extends Fragment {
                 String currentTime = DateTimeFormatter.ofPattern("M/d/yy - h:mm:ss").format(zdt);
 
                 //Get sending user
-                String sendingUsername = ((MainActivity)getActivity()).getUsername();;
+                String sendingUsername = ((MainActivity)getActivity()).getUsername();
 
                 //Get requested user
                 EditText enteredUsername = (EditText)getActivity().findViewById(R.id.enter_username);
@@ -233,6 +233,7 @@ public class FriendsFragment extends Fragment {
 
     //Function to fill  table with data from user's friends collection
     public void fillTable() throws InterruptedException, ExecutionException {
+
         DB.collection("friends_" + ((MainActivity)getActivity()).getUsername()).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -268,6 +269,90 @@ public class FriendsFragment extends Fragment {
 
                                 //Adds text view to table row in first column
                                 tr.addView(tv1, 0);
+
+                                //When tableRow is clicked, remove friend popup appears
+                                tr.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                        builder
+                                                .setTitle("Remove friend")
+                                                .setPositiveButton("Remove", (dialog, which) -> {
+                                                    //Removes friend from user's friend collection
+                                                    DB.collection("friends_" + ((MainActivity)getActivity()).getUsername())
+                                                            .whereEqualTo("username", username)
+                                                            .get()
+                                                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                                    //Puts all documents into list
+                                                                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                                                                    for (DocumentSnapshot d : list) {
+                                                                        d.getReference().delete();
+                                                                    }
+
+                                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                                    //Refresh the page
+                                                                    NavHostFragment.findNavController(FriendsFragment.this)
+                                                                            .navigate(R.id.action_friendsFragment_self);
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.w(TAG, "Error deleting document", e);
+                                                                }
+                                                            });
+
+                                                    //Removes user from friend's friends collection
+                                                    DB.collection("friends_" + username)
+                                                            .whereEqualTo("username", ((MainActivity)getActivity()).getUsername())
+                                                            .get()
+                                                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                                    //Puts all documents into list
+                                                                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                                                                    for (DocumentSnapshot d : list) {
+                                                                        d.getReference().delete();
+                                                                    }
+
+                                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+
+                                                                    //Refresh the page
+                                                                    NavHostFragment.findNavController(FriendsFragment.this)
+                                                                            .navigate(R.id.action_friendsFragment_self);
+
+                                                                    //Show "Friend removed" Toast
+                                                                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Friend removed", Toast.LENGTH_SHORT);
+                                                                    toast.show();
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.w(TAG, "Error deleting document", e);
+
+                                                                    //Show "Error removing friend" Toast
+                                                                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Error removing friend", Toast.LENGTH_SHORT);
+                                                                    toast.show();
+                                                                }
+                                                            });
+                                                })
+
+                                                .setNegativeButton("Cancel", (dialog, which) -> {
+                                                });
+
+                                        //Show the AlertDialog
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+
+                                        //Change button colors
+                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.GREEN);
+                                        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.GRAY);
+                                    }
+                                });
 
                                 //Adds row to table
                                 tl.addView(tr);
