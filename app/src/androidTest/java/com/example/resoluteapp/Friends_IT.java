@@ -33,8 +33,7 @@ public class Friends_IT {
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
-    //This function clears the SharedPreferences file before and after every test
-    @Before
+    //This function clears the SharedPreferences file after every test
     @After
     public void emptySharedPref(){
         SharedPreferences sp = getInstrumentation().getTargetContext().getSharedPreferences("com.example.ResoluteApp.SharedPrefs", Context.MODE_PRIVATE);
@@ -79,6 +78,7 @@ public class Friends_IT {
     }
 
     //Relies on testUser2 existing in friends_testUser1 collection
+    //Test will not function if run AFTER "removeFriend()" test
     @Test
     public void removeOption() throws InterruptedException {
         onView(withId(R.id.login_username_entry)).perform(typeText("testUser1"), closeSoftKeyboard());
@@ -101,6 +101,7 @@ public class Friends_IT {
 
     //Relies on testUser2 existing in friends_testUser1 collection
     //Relies on testUser1 existing in friends_testUser2 collection
+    //Test is not repeatable without database alteration.
     @Test
     public void removeFriend() throws InterruptedException {
         onView(withId(R.id.login_username_entry)).perform(typeText("testUser1"), closeSoftKeyboard());

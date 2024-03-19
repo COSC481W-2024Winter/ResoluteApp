@@ -46,8 +46,7 @@ public class PreviousActivity_IT {
     public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
 
-    //This function clears the SharedPreferences file before and after every test
-    @Before
+    //This function clears the SharedPreferences file after every test
     @After
     public void emptySharedPref(){
         SharedPreferences sp = getInstrumentation().getTargetContext().getSharedPreferences("com.example.ResoluteApp.SharedPrefs", Context.MODE_PRIVATE);
@@ -55,9 +54,6 @@ public class PreviousActivity_IT {
         editor.clear();
         editor.commit();
     }
-
-
-
 
 
     @Before
@@ -92,6 +88,8 @@ public class PreviousActivity_IT {
 
     }
 
+    //Test requires there to NOT exist an exercise in exercises_Test_User1 with exercise String "dummy_test_exercise".
+    //Test is not repeatable without database alteration.
     @Test
     public void currentUserTest() throws InterruptedException{
         onView(withId(R.id.to_home_from_previous_activity)).perform(click());

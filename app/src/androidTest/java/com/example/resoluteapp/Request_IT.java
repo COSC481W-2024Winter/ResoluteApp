@@ -10,15 +10,19 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.TableRow;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,6 +34,15 @@ public class Request_IT {
 
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
+
+    //This function clears the SharedPreferences file after every test
+    @After
+    public void emptySharedPref(){
+        SharedPreferences sp = getInstrumentation().getTargetContext().getSharedPreferences("com.example.ResoluteApp.SharedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear();
+        editor.commit();
+    }
 
     @Before
     public void navigateToLogExerciseScreen() throws InterruptedException {
@@ -54,6 +67,7 @@ public class Request_IT {
 
     }
 
+    //This test assumes there is a request from User20 in requests_User3. Test is not repeatable without database alteration.
     @Test
     public void testRowDeletionOnDeny() {
 
@@ -66,6 +80,7 @@ public class Request_IT {
     }
 
 
+    //This test assumes there is a request from User30 in requests_User3. Test is not repeatable without database alteration.
     @Test
     public void testRowDeletionOnApprove() {
 

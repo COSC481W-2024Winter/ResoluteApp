@@ -63,8 +63,7 @@ public class Inbox_IT {
         Thread.sleep(1000);
     }
 
-    //This function clears the SharedPreferences file before and after every test
-    @Before
+    //This function clears the SharedPreferences file after every test
     @After
     public void emptySharedPref(){
         SharedPreferences sp = getInstrumentation().getTargetContext().getSharedPreferences("com.example.ResoluteApp.SharedPrefs", Context.MODE_PRIVATE);
