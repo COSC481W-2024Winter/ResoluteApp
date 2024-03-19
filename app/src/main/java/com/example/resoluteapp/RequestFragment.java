@@ -120,16 +120,32 @@ public class RequestFragment extends Fragment {
                                 @Override
                                 public void onClick(View v) {
 
-                                    // Create an Object with String Attributes
-                                    Map<String, Object> theFriend = new HashMap<>();
-                                    theFriend.put("username", requestingUser);
+                                    // Create an Object with String Attributes for the user's friend list
+                                    Map<String, Object> theFriendForUser = new HashMap<>();
+                                    theFriendForUser.put("username", requestingUser);
 
-                                    // Add that Friend to the Users Friend List
-                                    DB.collection(usersFriendsList).add(theFriend).addOnSuccessListener(documentReference -> {
+                                    // Add that Friend to the User's Friend List
+                                    DB.collection(usersFriendsList).add(theFriendForUser).addOnSuccessListener(documentReference -> {
 
                                         // If the Write is Successful we'll know
                                         Toast successfulAdd = Toast.makeText(requireActivity().getApplicationContext(), "Friend Added", Toast.LENGTH_SHORT);
                                         successfulAdd.show();
+
+                                        // Now add the user to the requestingUser's friend list
+                                        Map<String, Object> theFriendForRequestingUser = new HashMap<>();
+                                        theFriendForRequestingUser.put("username", savedUser);
+
+                                        // The collection for the requesting user's friends
+                                        String requestingUsersFriendsCollection = "friends_" + requestingUser;
+
+                                        // Add the user to the requestingUser's friend list
+                                        DB.collection(requestingUsersFriendsCollection).add(theFriendForRequestingUser).addOnSuccessListener(documentReferenceForRequestingUser -> {
+
+                                            // Optional: You can show another Toast or log if you want to confirm this addition too
+
+                                        }).addOnFailureListener(e -> {
+                                            // Log or show Toast in case of failure to add the user to requestingUser's friends
+                                        });
 
                                         // Remove the Row From the Table
                                         ViewGroup parentView = (ViewGroup) newRow.getParent();
@@ -138,17 +154,13 @@ public class RequestFragment extends Fragment {
                                         // Remove the Request Document
                                         theDocument.getReference().delete();
 
-
                                     }).addOnFailureListener(e -> {
 
-                                        // If For Whatever reason the write couldnt happen. We'll Be Prompted.
+                                        // If For Whatever reason the write couldn't happen. We'll Be Prompted.
                                         Toast failureToAdd = Toast.makeText(requireActivity().getApplicationContext(), "Error With Friend Add", Toast.LENGTH_SHORT);
                                         failureToAdd.show();
 
-
                                     });
-
-
                                 }
                             });
 
