@@ -4,18 +4,16 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.resoluteapp.databinding.FragmentRegisterBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,11 +25,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class RegisterFragment extends Fragment {
 
@@ -44,10 +43,7 @@ public class RegisterFragment extends Fragment {
     private static final String TAG = "MainActivity";
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -62,10 +58,10 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //EditText items for User input
-                EditText regUsernameET = (EditText)getActivity().findViewById(R.id.register_username_entry);
-                EditText regNameET = (EditText)getActivity().findViewById(R.id.register_name_entry);
-                EditText regEmailET = (EditText)getActivity().findViewById(R.id.register_email_entry);
-                EditText regPasswordET = (EditText)getActivity().findViewById(R.id.register_password_entry);
+                EditText regUsernameET = (EditText) getActivity().findViewById(R.id.register_username_entry);
+                EditText regNameET = (EditText) getActivity().findViewById(R.id.register_name_entry);
+                EditText regEmailET = (EditText) getActivity().findViewById(R.id.register_email_entry);
+                EditText regPasswordET = (EditText) getActivity().findViewById(R.id.register_password_entry);
 
                 //Get entered Strings
                 String regUsernameString = regUsernameET.getText().toString();
@@ -74,48 +70,45 @@ public class RegisterFragment extends Fragment {
                 String regPasswordString = regPasswordET.getText().toString();
 
                 //Hash(encrypt) password
-                String hashword = ((MainActivity)getActivity()).hashString(regPasswordString);
+                String hashword = ((MainActivity) getActivity()).hashString(regPasswordString);
 
                 //Check that entered email contains "@"
-                if(!regEmailString.contains("@")){
+                if (!regEmailString.contains("@")) {
                     //Show Toast informing of email requirements
                     Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Entered email must contain @ sign", Toast.LENGTH_SHORT);
                     toast.show();
                 }
                 //Check that entered password is long enough
-                else if(!(regPasswordString.length() >= 8)){
+                else if (!(regPasswordString.length() >= 8)) {
                     //Show Toast informing of password requirements
                     Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Entered password must be at least 8 characters", Toast.LENGTH_SHORT);
                     toast.show();
                 }
                 //Check if remaining textboxes aren't empty (avoids redundant checks on password and email)
-                else if(regNameString.isEmpty() || regUsernameString.isEmpty()) {
+                else if (regNameString.isEmpty() || regUsernameString.isEmpty()) {
                     //Show Toast informing of empty textbox(s)
                     Toast toast = Toast.makeText(getActivity().getApplicationContext(), "All text fields must be filled", Toast.LENGTH_SHORT);
                     toast.show();
                 }
                 //Attempt a registration query, if the user if online
-                else{
+                else {
                     //Check if user is currently online (Only checks device's network status, not server connection)
-                    if(isOnline()){
+                    if (isOnline()) {
                         //Test connectivity to server by getting known item (FROM THE SERVER!!!)
-                        db.collection("collectionTest")
-                                .get(Source.SERVER)
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if(task.isSuccessful()) {
-                                            //Attempt registration
-                                            registration(regUsernameString, regNameString, regEmailString, hashword);
-                                        } else {
-                                            //Inform user they are offline, since the above test clearly failed
-                                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Connection failed", Toast.LENGTH_SHORT);
-                                            toast.show();
-                                        }
-                                    }
-                                });
-                    }
-                    else {
+                        db.collection("collectionTest").get(Source.SERVER).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    //Attempt registration
+                                    registration(regUsernameString, regNameString, regEmailString, hashword);
+                                } else {
+                                    //Inform user they are offline, since the above test clearly failed
+                                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Connection failed", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            }
+                        });
+                    } else {
                         //Inform user they are offline
                         Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Please connect to the Internet", Toast.LENGTH_SHORT);
                         toast.show();
@@ -128,8 +121,7 @@ public class RegisterFragment extends Fragment {
         binding.registerBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavHostFragment.findNavController(RegisterFragment.this)
-                        .navigate(R.id.action_registerFragment_to_loginFragment);
+                NavHostFragment.findNavController(RegisterFragment.this).navigate(R.id.action_registerFragment_to_loginFragment);
             }
         });
     }
@@ -139,32 +131,28 @@ public class RegisterFragment extends Fragment {
         ConnectivityManager connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
 
-        if(networkInfo != null && networkInfo.isConnectedOrConnecting()){
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
 
     //Function used to attempt registration. Written to make code cleaner
-    public void registration(String un, String nm, String em, String pw){
+    public void registration(String un, String nm, String em, String pw) {
         //Check if EITHER Username of Email is taken
-        db.collection("users").where(Filter.or(
-                Filter.equalTo("username", un),
-                Filter.equalTo("email", em)
-        )).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("users").where(Filter.or(Filter.equalTo("username", un), Filter.equalTo("email", em))).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     //If more than zero results, username/email is taken.
-                    if(task.getResult().size() != 0){
+                    if (task.getResult().size() != 0) {
                         //Inform user Username or Email is taken
                         Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Username/Email already taken", Toast.LENGTH_SHORT);
                         toast.show();
                     }
                     //Else, register this user's information in Database!
-                    else{
+                    else {
                         //Fill the newUser map, serving as the document to insert in db
                         Map<String, Object> newUser = new HashMap<>();
                         newUser.put("username", un);
@@ -173,40 +161,103 @@ public class RegisterFragment extends Fragment {
                         newUser.put("password", pw);
 
                         //Insert the new user to the database
-                        db.collection("users").document(un)
-                                .set(newUser)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                                        //Notify user of successful registration
-                                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Registration successful!", Toast.LENGTH_SHORT);
-                                        toast.show();
+                        db.collection("users").document(un).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                                //Notify user of successful registration
+                                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Registration successful!", Toast.LENGTH_SHORT);
+                                toast.show();
 
-                                        //Exit to login screen
-                                        NavHostFragment.findNavController(RegisterFragment.this)
-                                                .navigate(R.id.action_registerFragment_to_loginFragment);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        //Notify user of failure
-                                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Registration failed. Check connection and try again.", Toast.LENGTH_SHORT);
-                                        toast.show();
-                                        Log.w(TAG, "Error writing document", e);
+                                addStandardExercises(un);
+                                addStandardAmounts(un);
+                                addStandardUnits(un);
 
-                                        //Exit to login screen
-                                        NavHostFragment.findNavController(RegisterFragment.this)
-                                                .navigate(R.id.action_registerFragment_to_loginFragment);
-                                    }
-                                });
+                                //Exit to login screen
+                                NavHostFragment.findNavController(RegisterFragment.this).navigate(R.id.action_registerFragment_to_loginFragment);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                //Notify user of failure
+                                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Registration failed. Check connection and try again.", Toast.LENGTH_SHORT);
+                                toast.show();
+                                Log.w(TAG, "Error writing document", e);
+
+                                //Exit to login screen
+                                NavHostFragment.findNavController(RegisterFragment.this).navigate(R.id.action_registerFragment_to_loginFragment);
+                            }
+                        });
                     }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
+    }
+
+    private void addStandardExercises(String username) {
+
+        List<String> exerciseList = new ArrayList<>();
+
+        exerciseList.add("SWIMMING");
+        exerciseList.add("JOGGING");
+        exerciseList.add("LIFTING");
+        exerciseList.add("CYCLING");
+        exerciseList.add("ROWING");
+        exerciseList.add("YOGA");
+
+        for (String exerciseName : exerciseList) {
+
+            Map<String, Object> exercise = new HashMap<>();
+            exercise.put("name", exerciseName);
+
+            db.collection("users").document(username).collection("Exercises").document(exerciseName).set(exercise).addOnSuccessListener(unused -> Log.d("Firestore", "Exercise Successful")).addOnFailureListener(e -> Log.w("Firestore", "Error With Exercise"));
+
+        }
+
+    }
+
+    private void addStandardUnits(String username) {
+
+        List<String> unitList = new ArrayList<>();
+
+        unitList.add("REPS");
+        unitList.add("LAPS");
+        unitList.add("MINUTES");
+        unitList.add("MILES");
+        unitList.add("SETS");
+        unitList.add("STEPS");
+
+        for (String unitName : unitList) {
+
+            Map<String, Object> unit = new HashMap<>();
+            unit.put("name", unitName);
+
+            db.collection("users").document(username).collection("Units").document(unitName).set(unit).addOnSuccessListener(unused -> Log.d("Firestore", "Unit Successful")).addOnFailureListener(e -> Log.w("Firestore", "Error With Unit"));
+
+        }
+    }
+
+    private void addStandardAmounts(String username) {
+
+        List<String> amountList = new ArrayList<>();
+
+        amountList.add("5");
+        amountList.add("10");
+        amountList.add("15");
+        amountList.add("20");
+        amountList.add("25");
+        amountList.add("30");
+
+        for (String amountName : amountList) {
+
+            Map<String, Object> amount = new HashMap<>();
+            amount.put("name", amountName);
+
+            db.collection("users").document(username).collection("Amounts").document(amountName).set(amount).addOnSuccessListener(unused -> Log.d("Firestore", "Amount Successful")).addOnFailureListener(e -> Log.w("Firestore", "Error With Amount"));
+
+        }
     }
 
     @Override
