@@ -3,12 +3,13 @@ package com.example.resoluteapp;
 import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,9 +22,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -45,6 +47,7 @@ public class LogExerciseFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setupExerciseAuto();
 
         //Log Exercise Button
         binding.logExerciseButton.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +183,52 @@ public class LogExerciseFragment extends Fragment {
 
 
     }
+
+    private void setupExerciseAuto() {
+
+        String currentUser = ((MainActivity) getActivity()).getUsername();
+        AutoCompleteTextView exerciseField = getView().findViewById(R.id.editTextExercise);
+
+        theDB.collection("users").document(currentUser).collection("Exercises")
+                .get()
+                .addOnCompleteListener(theTask -> {
+
+                    if (theTask.isSuccessful()) {
+
+                        List<String> exercisesList = new ArrayList<>();
+
+                        for (QueryDocumentSnapshot exercise : theTask.getResult()) {
+                            String theExerciseName = exercise.getString("name");
+
+                            if (theExerciseName != null) {
+                                exercisesList.add(theExerciseName);
+                            }
+
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, exercisesList);
+                        exerciseField.setAdapter(adapter);
+                        exerciseField.setThreshold(0);
+
+                        exerciseField.setOnFocusChangeListener((view, hasFocus) -> {
+                            if(hasFocus) {
+                                exerciseField.showDropDown();
+                            }
+                        });
+
+                        exerciseField.setOnClickListener(view -> exerciseField.showDropDown());
+
+
+
+                    } else {
+                        Log.d("Firestore", "Error with documents?");
+                    }
+
+                });
+
+
+    }
+
 
     @Override
     public void onDestroyView() {
