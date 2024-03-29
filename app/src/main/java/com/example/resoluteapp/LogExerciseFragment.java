@@ -117,7 +117,7 @@ public class LogExerciseFragment extends Fragment {
             // Clear EditText fields
             clearFields();
 
-            sendExercisesToFriends(currentUser, theExercise);
+            sendExercisesToFriends(currentUser, theExercise, documentReference.getId());
 
 
         }).addOnFailureListener(e -> {
@@ -137,7 +137,7 @@ public class LogExerciseFragment extends Fragment {
         binding.editTextNumberOfUnits.setText("");
     }
 
-    private void sendExercisesToFriends(String currentUser, Map<String, Object> theExercise) {
+    private void sendExercisesToFriends(String currentUser, Map<String, Object> theExercise, String documentId) {
 
         // first Grab all the current users friends from the db
 
@@ -157,7 +157,7 @@ public class LogExerciseFragment extends Fragment {
                     if (friendsUsername != null) {
 
                         // Add the exercise to their collection
-                        theDB.collection("inbox_" + friendsUsername).add(theExercise)
+                        theDB.collection("inbox_" + friendsUsername).document(documentId).set(theExercise)
                                 // with logs for if it was successful or not
                                 .addOnSuccessListener(documentReference -> Log.d(TAG, "Exercise sent to friend: " + friendsUsername))
                                 .addOnFailureListener(error -> Log.d(TAG, "Error Sending Exercise to Friend: " + friendsUsername));
