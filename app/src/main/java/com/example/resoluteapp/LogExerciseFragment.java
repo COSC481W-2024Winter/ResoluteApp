@@ -3,11 +3,13 @@ package com.example.resoluteapp;
 import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
@@ -48,6 +50,8 @@ public class LogExerciseFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupExerciseAuto();
+        setupAmountAuto();
+        setupUnitsAuto();
 
         //Log Exercise Button
         binding.logExerciseButton.setOnClickListener(new View.OnClickListener() {
@@ -97,8 +101,7 @@ public class LogExerciseFragment extends Fragment {
         String units = binding.editTextUnits.getText().toString().trim();
         String numberOfUnits = binding.editTextNumberOfUnits.getText().toString().trim();
 
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         String dateString = dateFormat.format(new Date(System.currentTimeMillis()));
 
         // Create a data object
@@ -162,8 +165,7 @@ public class LogExerciseFragment extends Fragment {
                         // Add the exercise to their collection
                         theDB.collection("inbox_" + friendsUsername).document(documentId).set(theExercise)
                                 // with logs for if it was successful or not
-                                .addOnSuccessListener(documentReference -> Log.d(TAG, "Exercise sent to friend: " + friendsUsername))
-                                .addOnFailureListener(error -> Log.d(TAG, "Error Sending Exercise to Friend: " + friendsUsername));
+                                .addOnSuccessListener(documentReference -> Log.d(TAG, "Exercise sent to friend: " + friendsUsername)).addOnFailureListener(error -> Log.d(TAG, "Error Sending Exercise to Friend: " + friendsUsername));
                     } else {
 
                         // the friend isnt set up right? how did we get here
@@ -189,44 +191,136 @@ public class LogExerciseFragment extends Fragment {
         String currentUser = ((MainActivity) getActivity()).getUsername();
         AutoCompleteTextView exerciseField = getView().findViewById(R.id.editTextExercise);
 
-        theDB.collection("users").document(currentUser).collection("Exercises")
-                .get()
-                .addOnCompleteListener(theTask -> {
+        theDB.collection("users").document(currentUser).collection("Exercises").get().addOnCompleteListener(theTask -> {
 
-                    if (theTask.isSuccessful()) {
+            if (theTask.isSuccessful()) {
 
-                        List<String> exercisesList = new ArrayList<>();
+                List<String> exercisesList = new ArrayList<>();
 
-                        for (QueryDocumentSnapshot exercise : theTask.getResult()) {
-                            String theExerciseName = exercise.getString("name");
+                for (QueryDocumentSnapshot exercise : theTask.getResult()) {
+                    String theExerciseName = exercise.getString("name");
 
-                            if (theExerciseName != null) {
-                                exercisesList.add(theExerciseName);
-                            }
-
-                        }
-
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, exercisesList);
-                        exerciseField.setAdapter(adapter);
-                        exerciseField.setThreshold(0);
-
-                        exerciseField.setOnFocusChangeListener((view, hasFocus) -> {
-                            if(hasFocus) {
-                                exerciseField.showDropDown();
-                            }
-                        });
-
-                        exerciseField.setOnClickListener(view -> exerciseField.showDropDown());
-
-
-
-                    } else {
-                        Log.d("Firestore", "Error with documents?");
+                    if (theExerciseName != null) {
+                        exercisesList.add(theExerciseName);
                     }
 
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, exercisesList);
+                exerciseField.setAdapter(adapter);
+                exerciseField.setThreshold(0);
+
+                exerciseField.setOnFocusChangeListener((view, hasFocus) -> {
+                    if (hasFocus) {
+                        exerciseField.showDropDown();
+
+                    }
                 });
 
+                exerciseField.setOnClickListener(view -> exerciseField.showDropDown());
 
+
+            } else {
+                Log.d("Firestore", "Error with documents?");
+            }
+
+        });
+
+
+    }
+
+
+    private void setupAmountAuto() {
+
+        String currentUser = ((MainActivity) getActivity()).getUsername();
+        AutoCompleteTextView amountField = getView().findViewById(R.id.editTextNumberOfUnits);
+
+        theDB.collection("users").document(currentUser).collection("Amounts").get().addOnCompleteListener(theTask -> {
+
+            if (theTask.isSuccessful()) {
+
+                List<String> amountsList = new ArrayList<>();
+
+                for (QueryDocumentSnapshot amount : theTask.getResult()) {
+                    String theAmountsName = amount.getString("name");
+
+                    if (theAmountsName != null) {
+                        amountsList.add(theAmountsName);
+                    }
+
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, amountsList);
+                amountField.setAdapter(adapter);
+                amountField.setThreshold(0);
+
+                amountField.setOnFocusChangeListener((view, hasFocus) -> {
+                    if (hasFocus) {
+                        amountField.showDropDown();
+                    }
+                });
+
+                amountField.setOnClickListener(view -> amountField.showDropDown());
+
+
+            } else {
+                Log.d("Firestore", "Error with documents?");
+            }
+
+        });
+
+
+    }
+
+    private void setupUnitsAuto() {
+
+        String currentUser = ((MainActivity) getActivity()).getUsername();
+        AutoCompleteTextView unitsField = getView().findViewById(R.id.editTextUnits);
+
+        theDB.collection("users").document(currentUser).collection("Units").get().addOnCompleteListener(theTask -> {
+
+            if (theTask.isSuccessful()) {
+
+                List<String> unitsList = new ArrayList<>();
+
+                for (QueryDocumentSnapshot unit : theTask.getResult()) {
+                    String theUnitsName = unit.getString("name");
+
+                    if (theUnitsName != null) {
+                        unitsList.add(theUnitsName);
+                    }
+
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, unitsList);
+                unitsField.setAdapter(adapter);
+                unitsField.setThreshold(0);
+
+                unitsField.setOnFocusChangeListener((view, hasFocus) -> {
+                    if (hasFocus) {
+                        unitsField.showDropDown();
+                    }
+                });
+
+                unitsField.setOnClickListener(view -> unitsField.showDropDown());
+
+
+            } else {
+                Log.d("Firestore", "Error with documents?");
+            }
+
+        });
+
+
+    }
+
+    private void toggleKeyboardVisibility(Context context, View view, boolean show) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (show) {
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        } else {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
 
