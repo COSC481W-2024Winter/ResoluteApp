@@ -20,6 +20,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.resoluteapp.databinding.FragmentLogExerciseBinding;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -97,8 +99,8 @@ public class LogExerciseFragment extends Fragment {
         //get the username of the user that is currently logged in
         String currentUser = ((MainActivity) getActivity()).getUsername();
 
-        String exerciseName = binding.editTextExercise.getText().toString().trim();
-        String units = binding.editTextUnits.getText().toString().trim();
+        String exerciseName = binding.editTextExercise.getText().toString().trim().toUpperCase();
+        String units = binding.editTextUnits.getText().toString().trim().toUpperCase();
         String numberOfUnits = binding.editTextNumberOfUnits.getText().toString().trim();
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -122,6 +124,7 @@ public class LogExerciseFragment extends Fragment {
 
             // Clear EditText fields
             clearFields();
+            checkAndMaybeAddNewExercise(currentUser, exerciseName);
 
             sendExercisesToFriends(currentUser, theExercise, documentReference.getId());
 
@@ -132,6 +135,35 @@ public class LogExerciseFragment extends Fragment {
             // Handle error if needed
             Toast failureMessage = Toast.makeText(requireActivity().getApplicationContext(), "Failure To Log Exercise", Toast.LENGTH_LONG);
             failureMessage.show();
+        });
+
+    }
+
+    private void checkAndMaybeAddNewExercise(String currentUser, String exerciseName) {
+
+        DocumentReference exerciseDocument = theDB.collection("users").document(currentUser).collection("Exercises").document(exerciseName);
+
+        exerciseDocument.get().addOnCompleteListener(ifItsFound -> {
+
+            if (ifItsFound.isSuccessful()) {
+
+                DocumentSnapshot instanceOfExerciseDocument = ifItsFound.getResult();
+
+                if (!instanceOfExerciseDocument.exists()) {
+                    // Add the Document
+                    Map<String, Object> theExercise = new HashMap<>();
+                    theExercise.put("name", exerciseName);
+
+                    exerciseDocument.set(theExercise)
+                            .addOnSuccessListener(theTask -> Log.d(TAG, "New Exercise Added"))
+                            .addOnFailureListener(error -> Log.w(TAG, "Exercise Not Added Something Wrong"));
+                }
+
+            } else {
+                Log.d(TAG, "Couldnt Check If Documents Exist?");
+            }
+
+
         });
 
     }
