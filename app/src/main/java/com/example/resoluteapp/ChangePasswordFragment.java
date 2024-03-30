@@ -71,60 +71,70 @@ public class ChangePasswordFragment extends Fragment {
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                //If currentPasswordString is equal to user's current password, check if newPasswordString and confirmNewPassword are equal
-                                if (task.getResult().size() == 1) {
-                                    //If newPasswordString and confirmNewPassword are equal, change password
-                                    if (new_password.equals(confirm_new_password)) {
-                                        Map<String, Object> data = new HashMap<>();
-                                        data.put("password", hash_new);
-
-                                        DB.collection("users").document(current_user)
-                                                .update(data)
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void unused) {
-                                                        //Clear and set username and password in SharedPreferences
-                                                        ((MainActivity)getActivity()).clearSharedPref();
-                                                        ((MainActivity)getActivity()).setUsernameAndPassword(current_user, hash_new);
-
-                                                        //Show "Password changed" Toast
-                                                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Password changed", Toast.LENGTH_SHORT);
-                                                        toast.show();
-
-                                                        clearFields();
-                                                        Log.d(TAG, "Password changed");
-
-                                                        //Navigate to home page
-                                                        NavHostFragment.findNavController(ChangePasswordFragment.this)
-                                                                .navigate(R.id.action_changePasswordFragment_to_homeFragment);
-                                                    }
-                                                })
-
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        //Show "Password not changed" Toast
-                                                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Password not changed", Toast.LENGTH_SHORT);
-                                                        toast.show();
-
-                                                        Log.w(TAG, "Error changing password", e);
-                                                    }
-                                                });
-                                    }
-
-                                    //If newPassword and confirmNewPassword are not equal, do not change password
-                                    else {
-                                        //Show "New passwords to not match" Toast
-                                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "New passwords do not match", Toast.LENGTH_SHORT);
-                                        toast.show();
-                                    }
+                                //If a password field is empty, do not change password
+                                if (current_password.isEmpty() || new_password.isEmpty() || confirm_new_password.isEmpty()) {
+                                    //Show "All fields must be filled" Toast
+                                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), "All fields must be filled", Toast.LENGTH_SHORT);
+                                    toast.show();
                                 }
 
-                                //If currentPasswordString is not equal to user's current password, do not change password
+                                //If password fields are not empty, check if currentPasswordString is equal to user's current password
                                 else {
-                                    //Show "Current password is incorrect" Toast
-                                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Current password is incorrect", Toast.LENGTH_SHORT);
-                                    toast.show();
+                                    //If currentPasswordString is equal to user's current password, check if newPasswordString and confirmNewPassword are equal
+                                    if (task.getResult().size() == 1) {
+                                        //If newPasswordString and confirmNewPassword are equal, change password
+                                        if (new_password.equals(confirm_new_password)) {
+                                            Map<String, Object> data = new HashMap<>();
+                                            data.put("password", hash_new);
+
+                                            DB.collection("users").document(current_user)
+                                                    .update(data)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            //Clear and set username and password in SharedPreferences
+                                                            ((MainActivity) getActivity()).clearSharedPref();
+                                                            ((MainActivity) getActivity()).setUsernameAndPassword(current_user, hash_new);
+
+                                                            //Show "Password changed" Toast
+                                                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Password changed", Toast.LENGTH_SHORT);
+                                                            toast.show();
+
+                                                            clearFields();
+                                                            Log.d(TAG, "Password changed");
+
+                                                            //Navigate to home page
+                                                            NavHostFragment.findNavController(ChangePasswordFragment.this)
+                                                                    .navigate(R.id.action_changePasswordFragment_to_homeFragment);
+                                                        }
+                                                    })
+
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            //Show "Password not changed" Toast
+                                                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Password not changed", Toast.LENGTH_SHORT);
+                                                            toast.show();
+
+                                                            Log.w(TAG, "Error changing password", e);
+                                                        }
+                                                    });
+                                        }
+
+                                        //If newPassword and confirmNewPassword are not equal, do not change password
+                                        else {
+                                            //Show "New passwords to not match" Toast
+                                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "New passwords do not match", Toast.LENGTH_SHORT);
+                                            toast.show();
+                                        }
+                                    }
+
+                                    //If currentPasswordString is not equal to user's current password, do not change password
+                                    else {
+                                        //Show "Current password is incorrect" Toast
+                                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Current password is incorrect", Toast.LENGTH_SHORT);
+                                        toast.show();
+                                    }
                                 }
                             }
                         });

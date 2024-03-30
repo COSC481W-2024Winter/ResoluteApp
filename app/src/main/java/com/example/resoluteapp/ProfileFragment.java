@@ -124,6 +124,10 @@ public class ProfileFragment extends Fragment {
                                                         toast.show();
 
                                                         Log.d(TAG, "User information updated");
+
+                                                        //Navigate to home page
+                                                        NavHostFragment.findNavController(ProfileFragment.this)
+                                                                .navigate(R.id.action_profileFragment_to_homeFragment);
                                                     }
                                                 })
 
