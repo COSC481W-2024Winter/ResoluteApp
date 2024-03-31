@@ -88,6 +88,7 @@ public class InboxFragment extends Fragment {
             TableRow tr = (TableRow) tl.getChildAt(i);
             TextView tvUsername = (TextView) tr.getChildAt(0);
             String username = tvUsername.getText().toString();
+            // Call the sendReply function for each row
             sendReply(username, reply);
             removeFromTable(tr.getTag().toString());
         }
