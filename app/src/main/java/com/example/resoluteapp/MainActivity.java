@@ -88,6 +88,22 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    //Function to store current exercise document id in  SharedPreferences. Used when navigating to view an exercise's replies
+    //Call this from fragment with ((MainActivity)getActivity()).setExercise(STRING);
+    public void setExercise(String id){
+        SharedPreferences sp = this.getSharedPreferences("com.example.ResoluteApp.SharedPrefs",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("exercise_id", id);
+        editor.apply();
+    }
+
+    //Function to retrieve current exercise document id from SharedPreferences. Used when navigating to view an exercise's replies
+    //Call this from fragment with ((MainActivity)getActivity()).getExercise();
+    public String getExercise(){
+        SharedPreferences sp = this.getSharedPreferences("com.example.ResoluteApp.SharedPrefs",Context.MODE_PRIVATE);
+        return sp.getString("exercise_id", "DEFAULT EXERCISE ID. SHOULD BE UNSEEN.");
+    }
+
     //Function to retrieve username from SharedPreferences
     //Call this function from fragment with "((MainActivity)getActivity()).getUsername();"
     public String getUsername(){

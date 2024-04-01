@@ -54,6 +54,9 @@
         <action
             android:id="@+id/action_prevActivityFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_prevActivityFragment_to_replyFragment"
+            app:destination="@id/replyFragment" />
     </fragment>
     <fragment
         android:id="@+id/logExerciseFragment"
@@ -129,5 +132,14 @@
         <action
             android:id="@+id/action_requestFragment_to_friendsFragment"
             app:destination="@id/friendsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/replyFragment"
+        android:name="com.example.resoluteapp.ReplyFragment"
+        android:label="fragment_reply"
+        tools:layout="@layout/fragment_reply" >
+        <action
+            android:id="@+id/action_replyFragment_to_prevActivityFragment"
+            app:destination="@id/prevActivityFragment" />
     </fragment>
 </navigation>
