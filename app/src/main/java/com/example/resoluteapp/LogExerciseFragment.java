@@ -154,9 +154,7 @@ public class LogExerciseFragment extends Fragment {
                     Map<String, Object> theExercise = new HashMap<>();
                     theExercise.put("name", exerciseName);
 
-                    exerciseDocument.set(theExercise)
-                            .addOnSuccessListener(theTask -> Log.d(TAG, "New Exercise Added"))
-                            .addOnFailureListener(error -> Log.w(TAG, "Exercise Not Added Something Wrong"));
+                    exerciseDocument.set(theExercise).addOnSuccessListener(theTask -> Log.d(TAG, "New Exercise Added")).addOnFailureListener(error -> Log.w(TAG, "Exercise Not Added Something Wrong"));
                 }
 
             } else {

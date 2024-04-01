@@ -5,18 +5,13 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.isDialog;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
-import static org.hamcrest.CoreMatchers.not;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -48,7 +43,7 @@ public class LogExercise_IT {
 
     //This function clears the SharedPreferences file after every test
     @After
-    public void emptySharedPref(){
+    public void emptySharedPref() {
         SharedPreferences sp = getInstrumentation().getTargetContext().getSharedPreferences("com.example.ResoluteApp.SharedPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();
@@ -85,4 +80,5 @@ public class LogExercise_IT {
         onView(withId(R.id.editTextNumberOfUnits)).check(matches(withText("")));
 
     }
+
 }
