@@ -9,6 +9,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.example.resoluteapp.databinding.FragmentReplyBinding;
 import com.example.resoluteapp.databinding.FragmentRequestBinding;
@@ -44,6 +47,15 @@ public class ReplyFragment extends Fragment {
         spUsername = ((MainActivity)getActivity()).getUsername();
         exerciseId = ((MainActivity)getActivity()).getExercise();
 
+        //fill the tablelayout
+        try {
+            fillTable();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+
         return binding.getRoot();
     }
 
@@ -60,6 +72,67 @@ public class ReplyFragment extends Fragment {
         });
     }
 
+    //function to fill the table with data from replies collection
+    public void fillTable() throws InterruptedException, ExecutionException {
+        //retrieve replies for current exercise
+        DB.collection("exercises_" + spUsername)
+                .document(exerciseId)
+                .collection("replies")
+                .orderBy("Date", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
+                        //checks that there is currently data to retrieve
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            //puts all the documents of data into a list
+                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+
+                            //finds the table in the fragment_reply.xml
+                            TableLayout tl = (TableLayout) getView().findViewById(R.id.reply_table_layout);
+                            tl.removeViews(1, Math.max(0, tl.getChildCount() - 1));
+
+                            //loops through all the documents in the list to fill the table
+                            for (DocumentSnapshot d : list) {
+                                String replyText = "";
+                                replyText = replyText + d.getString("Username") +
+                                            " says \"" + d.getString("Reply") + "\"";
+
+                                //creates a new row for the reply, and a textview to put inside
+                                TableRow tr = new TableRow(getActivity().getApplicationContext());
+                                TextView tv = new TextView(getActivity().getApplicationContext());
+
+                                //sets height of tablerow
+                                tr.setMinimumHeight(60);
+
+                                //sets text in tablerow to show replyText
+                                tv.setText(replyText);
+
+                                //configure UI design of tablerow
+                                tr.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+                                //add textview to tablerow
+                                tr.addView(tv);
+
+                                //add row to tablelayout
+                                tl.addView(tr);
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 
 }

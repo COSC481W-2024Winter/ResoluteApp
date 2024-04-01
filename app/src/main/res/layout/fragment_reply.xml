@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
+        android:backgroundTint="@color/black"
         android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,6 +30,7 @@
         app:layout_constraintVertical_bias="0.252">
 
         <TableLayout
+            android:id="@+id/reply_table_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -41,6 +43,7 @@
                 <TextView
                     android:id="@+id/replies"
                     android:layout_width="324dp"
+                    android:background="#FBF089"
                     android:padding="10dip"
                     android:text="Replies"
                     android:textAlignment="center"
