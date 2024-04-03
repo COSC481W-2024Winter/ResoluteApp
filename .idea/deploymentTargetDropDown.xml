@@ -2,22 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="LogExercise_IT">
-        <State />
-      </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="blankFieldsTest()">
-        <State />
-      </entry>
-      <entry key="clearTextFieldsAfterSuccessfulLog()">
-        <State />
-      </entry>
-      <entry key="invalidUsernameEntered()">
-        <State />
-      </entry>
-      <entry key="navigationBackHomeTest()">
+      <entry key="sendExerciseToFriend()">
         <State />
       </entry>
     </value>
