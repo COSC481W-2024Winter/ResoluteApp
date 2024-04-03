@@ -112,6 +112,7 @@ public class LogExercise_IT {
 
         onView(withId(R.id.tableLayout)).check(matches(isDisplayed()));
         onView(allOf(withText("UNIQUE"))).perform(click());
+        onView(withText("Send")).perform(click());
 
 
 
