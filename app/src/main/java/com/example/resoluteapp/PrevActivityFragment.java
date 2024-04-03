@@ -155,6 +155,16 @@ public class PrevActivityFragment extends Fragment {
                                 //adds it to the table row in the fourth column
                                 tr.addView(tv4, 3);
 
+                                //set navigation onClick listener to every exercise
+                                tr.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ((MainActivity)getActivity()).setExercise(d.getId());
+                                        NavHostFragment.findNavController(PrevActivityFragment.this)
+                                                .navigate(R.id.action_prevActivityFragment_to_replyFragment);
+                                    }
+                                });
+
                                 //adds the row to the table
                                 tl.addView(tr);
                             }
