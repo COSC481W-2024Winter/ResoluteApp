@@ -109,15 +109,27 @@ public class ReplyFragment extends Fragment {
                                 //sets text in tablerow to show replyText
                                 tv.setText(replyText);
 
-                                //configure UI design of tablerow
-                                tr.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
                                 //add textview to tablerow
                                 tr.addView(tv);
 
                                 //add row to tablelayout
                                 tl.addView(tr);
                             }
+                        }
+                        //else block takes place if query result is empty
+                        else {
+                            //finds the table in the fragment_reply.xml
+                            TableLayout tl = (TableLayout) getView().findViewById(R.id.reply_table_layout);
+                            tl.removeViews(1, Math.max(0, tl.getChildCount() - 1));
+
+                            TableRow tr = new TableRow(getActivity().getApplicationContext());
+                            TextView tv = new TextView(getActivity().getApplicationContext());
+
+                            tv.setText("No replies yet...");
+                            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+                            tr.addView(tv);
+                            tl.addView(tr);
                         }
                     }
                 })

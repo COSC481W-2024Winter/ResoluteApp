@@ -6,9 +6,6 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -23,7 +20,6 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.isIn;
 import static org.junit.Assert.assertEquals;
 
-import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -83,7 +79,7 @@ public class PreviousActivity_IT {
     public void orderedTableTest() throws InterruptedException {
         onView(withId(R.id.tableLayout)).check(matches(isDisplayed()));
 
-        onView(allOf(withText(R.id.date),
+        onView(allOf(withText(R.id.replies),
                 isDescendantOfA(allOf(instanceOf(TableRow.class), isDisplayed()))));
 
     }

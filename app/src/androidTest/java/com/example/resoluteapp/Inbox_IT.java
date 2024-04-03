@@ -20,6 +20,7 @@ import androidx.test.filters.LargeTest;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +39,9 @@ public class Inbox_IT {
 
         - Choosing to send a reply shows the appropriate reply in PreviousActivity.
           This can be done as part of issue #45
-          The selected exercise must be sent and received by User1, meaning User1 and User1 must be
+            [ADDENDUM] - The functionality to delete a logged exercise from PrevActivity is no longer
+                            a part of issue #45, so this test cannot be made continuous until then.
+          The selected exercise must be sent and received by UserR, meaning UserR and UserR must be
             friends.
           After clicking "Send", navigate to previous activity screen, and open the replies for
             the exercise used for testing.
@@ -53,7 +56,7 @@ public class Inbox_IT {
     //Function that logs in as User1 and navigates to the Inbox screen
     @Before
     public void navigateToInboxScreen() throws InterruptedException {
-        // Navigate to the log exercise screen before each test
+        // Navigate to the inbox screen before each test
         onView(withId(R.id.login_username_entry)).perform(typeText("User1"), closeSoftKeyboard());
         onView(withId(R.id.login_password_entry)).perform(typeText("Password1"), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
@@ -95,5 +98,43 @@ public class Inbox_IT {
         onView(withText("TEST ITEM")).perform(click());//Check that testing message still exists
     }
 
-
+    //Test that checks if a sent reply is stored in the correct sub-collection
+        //Linear. Done by having a user be friends with themself, and reply to their own exercise
+    @Test
+    public void replySendReceive() throws InterruptedException{
+        //Logout as User1
+        onView(withId(R.id.to_profile_from_inbox)).perform(click());
+        Thread.sleep(1000);
+        onView(withId(R.id.logout_button)).perform(click());
+        Thread.sleep(1000);
+        //Login as UserR
+        onView(withId(R.id.login_username_entry)).perform(typeText("UserR"), closeSoftKeyboard());
+        onView(withId(R.id.login_password_entry)).perform(typeText("PasswordR"), closeSoftKeyboard());
+        onView(withId(R.id.login_button)).perform(click());
+        Thread.sleep(1000);
+        //Log an exercise
+        onView(withId(R.id.to_log_exercise_button)).perform(click());
+        onView(withId(R.id.editTextExercise)).perform(typeText("Reply Test"));
+        onView(withId(R.id.editTextNumberOfUnits)).perform(typeText("Reply Amount"));
+        onView(withId(R.id.editTextUnits)).perform(typeText("Reply Units"), closeSoftKeyboard());
+        onView(withId(R.id.log_exercise_button)).perform(click());
+        //Navigate to Inbox
+        onView(withId(R.id.to_home_from_log_exercise)).perform(click());
+        Thread.sleep(1000);
+        onView(withId(R.id.to_inbox_from_home)).perform(click());
+        Thread.sleep(1000);
+        //Reply to the exercise
+        onView(withText("SelfReplyExercise")).perform(click()); //Replace SelfReplyExercise with "Reply Test" after #44 is merged
+        onView(withText("Proud of you!")).perform(click());
+        onView(withText("Send")).perform(click());
+        //Navigate to Previous Activity -> Replies
+        onView(withId(R.id.to_home_from_inbox)).perform(click());
+        Thread.sleep(1000);
+        onView(withId(R.id.to_previous_activity_button)).perform(click());
+        Thread.sleep(1000);
+        onView(withText("SelfReplyExercise")).perform(click()); //Replace SelfReplyExercise with "Reply Test" after #44 is merged
+        Thread.sleep(1000);
+        //Check for correct reply from self
+        onView(withText("UserR says \"Proud of you!\"")).perform(click());
+    }
 }
