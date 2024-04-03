@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.resoluteapp.databinding.FragmentInboxBinding;
-import com.example.resoluteapp.databinding.FragmentProfileBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -40,56 +39,39 @@ public class InboxFragment extends Fragment {
 
     private FragmentInboxBinding binding;
 
-    FirebaseFirestore DB = FirebaseFirestore.getInstance();
+    private FirebaseFirestore DB = FirebaseFirestore.getInstance();
+
+    // Variable to store the username retrieved from SharedPreferences
+    // This variable holds the username of the current user, which is obtained from SharedPreferences.
+    // It is used to identify the user and perform user-specific operations throughout the fragment.
+    private String spUsername;
+
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentInboxBinding.inflate(inflater, container, false);
+        spUsername = ((MainActivity) requireActivity()).getUsername();
 
         //calls the fillTable() function when the page is created so it is filled simultaneously
         try {
             fillTable();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
-
         return binding.getRoot();
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         //Friends Button
-        binding.toFriendsFromInbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(InboxFragment.this)
-                        .navigate(R.id.action_inboxFragment_to_friendsFragment);
-            }
-        });
-
+        binding.toFriendsFromInbox.setOnClickListener(v -> NavHostFragment.findNavController(InboxFragment.this).navigate(R.id.action_inboxFragment_to_friendsFragment));
         //Home Button
-        binding.toHomeFromInbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(InboxFragment.this)
-                        .navigate(R.id.action_inboxFragment_to_homeFragment);
-            }
-        });
-
+        binding.toHomeFromInbox.setOnClickListener(v -> NavHostFragment.findNavController(InboxFragment.this).navigate(R.id.action_inboxFragment_to_homeFragment));
         //Profile Button
-        binding.toProfileFromInbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(InboxFragment.this)
-                        .navigate(R.id.action_inboxFragment_to_profileFragment);
-            }
+        binding.toProfileFromInbox.setOnClickListener(v -> NavHostFragment.findNavController(InboxFragment.this).navigate(R.id.action_inboxFragment_to_profileFragment));
+        // Reply to All Button
+        binding.ReplyAll.setOnClickListener(v -> {
+            showReplyDialog(null, null); // Show reply dialog for "Reply All"
         });
     }
 
@@ -99,181 +81,209 @@ public class InboxFragment extends Fragment {
         binding = null;
     }
 
-    //function to fill the table with data from exercise collection
-    public void fillTable() throws InterruptedException, ExecutionException {
-        //get username from SharedPreferences
-        String spUsername = ((MainActivity)getActivity()).getUsername();
+    // Function to reply to all rows
+    private void replyToAllRows(String reply) {
+        TableLayout tl = binding.tableLayout;
+        for (int i = 1; i < tl.getChildCount(); i++) {
+            TableRow tr = (TableRow) tl.getChildAt(i);
+            TextView tvUsername = (TextView) tr.getChildAt(0);
+            String username = tvUsername.getText().toString();
+            // Call the sendReply function for each row
+            sendReply(username, reply);
+            removeFromTable(tr.getTag().toString());
+        }
+        refreshTable(); // Refresh the table after replying to all rows
+    }
+
+    // Function to reply to a single row
+    private void sendReply(String username, String reply) {
+        // Send reply to Firestore
+        // Create a data object
+        Map<String, Object> replyData = new HashMap<>();
+
+        //Format for current time
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String dateString = dateFormat.format(new Date(System.currentTimeMillis()));
+
+        //Fill the reply query
+        replyData.put("Username", spUsername);
+        replyData.put("Reply", reply);
+        replyData.put("Date", Timestamp.now());
+        replyData.put("Date_String", dateString);
+
+        //Send the reply query
+        DB.collection("exercises_" + username)
+                .document(/* Add the document ID here */)
+                .collection("replies")
+                .add(replyData)
+                .addOnSuccessListener(documentReference -> {
+
+                    // Log success
+                    Log.d(TAG, "Reply sent with ID: " + documentReference.getId());
+                    Toast.makeText(requireActivity().getApplicationContext(), "Reply sent!", Toast.LENGTH_SHORT).show();
+                    refreshTable();
+                })
+                .addOnFailureListener(e -> {
+                    // Log failure
+                    Log.w(TAG, "Error sending reply", e);
+                    // Handle error if needed
+                    Toast.makeText(requireActivity().getApplicationContext(), "Failure sending reply", Toast.LENGTH_LONG).show();
+                });
+    }
+
+    // Function to remove the corresponding row from the table
+    private void removeFromTable(String docId) {
+
+        //Remove this document from inbox_USERNAME
+        DB.collection("inbox_"+spUsername)
+                .document(docId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    //Refresh the page
+                    refreshTable();
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
+    }
+
+    // Function to fill the table with data from inbox collection
+    private void fillTable() throws InterruptedException, ExecutionException {
 
         //indicates what collection to retrieve data from
         DB.collection("inbox_" + spUsername).orderBy("Date")
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                .addOnSuccessListener(queryDocumentSnapshots -> {
 
-                        //checks that there is currently data to retrieve
-                        if (!queryDocumentSnapshots.isEmpty()) {
+                    //checks that there is currently data to retrieve
+                    if (!queryDocumentSnapshots.isEmpty()) {
 
-                            //puts all the documents of data into a list
-                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                        //puts all the documents of data into a list
+                        List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
 
-                            //finds the table in the fragment_prev_activity.xml
-                            TableLayout tl = (TableLayout) getView().findViewById(R.id.tableLayout);
-                            int columnWidth = tl.getWidth() / 4;
+                        // Get the TableLayout from the binding
+                        TableLayout tl = binding.tableLayout;
 
-                            tl.removeViews(1, Math.max(0, tl.getChildCount() - 1));
+                        // Remove child views starting from index 1 (excluding the header row) up to the last index
+                        // Math.max(0, tl.getChildCount() - 1) ensures that if the TableLayout has only the header row,
+                        // it won't try to remove a negative number of views.
+                        tl.removeViews(1, Math.max(0, tl.getChildCount() - 1));
 
-                            //loops through all the documents in the list to fill the table
-                            for (DocumentSnapshot d : list) {
-                                //puts each piece of data in the document into its own variable
-                                String date = d.getString("Date_String");
-                                String exercise = d.getString("Exercise");
-                                String amount = d.getString("Amount");
-                                String unit = d.getString("Units");
-                                String username = d.getString("Username");
+                        //loops through all the documents in the list to fill the table
+                        for (DocumentSnapshot d : list) {
+                            String date = d.getString("Date_String");
+                            String exercise = d.getString("Exercise");
+                            String amount = d.getString("Amount");
+                            String unit = d.getString("Units");
+                            String username = d.getString("Username");
+                            String docId = d.getId();
 
-                                //creates a new row for the exercise and 4 text views in the row
-                                TableRow tr = new TableRow(getActivity().getApplicationContext());
-                                TextView tv1 = new TextView(getActivity().getApplicationContext());
-                                TextView tv2 = new TextView(getActivity().getApplicationContext());
-                                TextView tv3 = new TextView(getActivity().getApplicationContext());
-                                TextView tv4 = new TextView(getActivity().getApplicationContext());
+                            //creates a new row for the exercise and 4 text views in the row
+                            TableRow tr = new TableRow(requireContext());
+                            tr.setTag(docId); // Set document ID as tag
+                            TextView tv1 = new TextView(requireContext());
+                            TextView tv2 = new TextView(requireContext());
+                            TextView tv3 = new TextView(requireContext());
+                            TextView tv4 = new TextView(requireContext());
 
-                                //set id for tablerow
-                                tr.generateViewId();
+                            //set id for tablerow
+                            tr.generateViewId();
 
-                                //sets height of tablerow
-                                tr.setMinimumHeight(60);
+                            //sets height of tablerow
+                            tr.setMinimumHeight(60);
 
-                                //sets the first text view with the username data for the exercise
-                                tv1.setText(username);
-                                tv1.setTextColor(Color.BLACK);
-                                tv1.setPadding(10, 10, 10, 10);
-                                tv1.setTextSize(12);
-                                tv1.setWidth(columnWidth);
+                            //sets the first text view with the username data for the exercise
+                            tv1.setText(username);
+                            tv1.setTextColor(Color.BLACK);
+                            tv1.setPadding(10, 10, 10, 10);
+                            tv1.setTextSize(12);
+                            tv1.setWidth(tl.getWidth() / 4);
 
-                                //adds it to the table row in the first column
-                                tr.addView(tv1, 0);
+                            //adds it to the table row in the first column
+                            tr.addView(tv1, 0);
 
-                                //sets the second text view with the exercise data for the exercise
-                                tv2.setText(exercise);
-                                tv2.setTextColor(Color.BLACK);
-                                tv2.setPadding(10, 10, 10, 10);
-                                tv2.setTextSize(12);
-                                tv2.setWidth(columnWidth);
+                            //sets the second text view with the exercise data for the exercise
+                            tv2.setText(exercise);
+                            tv2.setTextColor(Color.BLACK);
+                            tv2.setPadding(10, 10, 10, 10);
+                            tv2.setTextSize(12);
+                            tv2.setWidth(tl.getWidth() / 4);
 
-                                //adds it to the table row in the second column
-                                tr.addView(tv2, 1);
+                            //adds it to the table row in the second column
+                            tr.addView(tv2, 1);
 
-                                //sets the third text view with the amount data for the exercise
-                                tv3.setText(amount);
-                                tv3.setTextColor(Color.BLACK);
-                                tv3.setPadding(10, 10, 10, 10);
-                                tv3.setTextSize(12);
-                                tv3.setWidth(columnWidth);
+                            //sets the third text view with the amount data for the exercise
+                            tv3.setText(amount);
+                            tv3.setTextColor(Color.BLACK);
+                            tv3.setPadding(10, 10, 10, 10);
+                            tv3.setTextSize(12);
+                            tv3.setWidth(tl.getWidth() / 4);
 
-                                //adds it to the table row in the third column
-                                tr.addView(tv3, 2);
+                            //adds it to the table row in the third column
+                            tr.addView(tv3, 2);
 
-                                //sets the fourth text view with the unit data for the exercise
-                                tv4.setText(unit);
-                                tv4.setTextColor(Color.BLACK);
-                                tv4.setPadding(10, 10, 10, 10);
-                                tv4.setTextSize(12);
-                                tv4.setWidth(columnWidth);
 
-                                //adds it to the table row in the fourth column
-                                tr.addView(tv4, 3);
+                            //sets the fourth text view with the unit data for the exercise
+                            tv4.setText(unit);
+                            tv4.setTextColor(Color.BLACK);
+                            tv4.setPadding(10, 10, 10, 10);
+                            tv4.setTextSize(12);
+                            tv4.setWidth(tl.getWidth() / 4);
 
-                                //when tablerow is clicked, a reply popup appears
-                                tr.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        //build the alertdialog
-                                        String[] choices = {"Keep at it!", "Good hustle!", "I'm falling behind!", "Proud of you!"};
+                            //adds it to the table row in the fourth column
+                            tr.addView(tv4, 3);
 
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                        builder
-                                                .setTitle("Encourage your friend?")
-                                                .setPositiveButton("Send", (dialog, which) -> {
-                                                    int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                            // Set a click listener on the TableRow to trigger the reply dialog
+                            tr.setOnClickListener(v -> showReplyDialog(username, docId)); // Pass docId
 
-                                                    //Clicking "send" sends the reply to the appropriate sub-collection
-                                                    // Create a data object
-                                                    Map<String, Object> reply = new HashMap<>();
-
-                                                    //Format for current time
-                                                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-                                                    String dateString = dateFormat.format(new Date(System.currentTimeMillis()));
-
-                                                    //Fill the reply query
-                                                    reply.put("Username", spUsername);
-                                                    reply.put("Reply", choices[selectedPosition]);
-                                                    reply.put("Date", Timestamp.now());
-                                                    reply.put("Date_String", dateString);
-
-                                                    //Send the reply query
-                                                    DB.collection("exercises_"+username)
-                                                            .document(d.getId())
-                                                            .collection("replies")
-                                                            .add(reply)
-                                                            .addOnSuccessListener(documentReference -> {
-                                                                // Log success
-                                                                Log.d(TAG, "Reply sent with ID: " + documentReference.getId());
-                                                                Toast successMessage = Toast.makeText(requireActivity().getApplicationContext(), "Reply sent!", Toast.LENGTH_SHORT);
-                                                                successMessage.show();
-
-                                                                //Remove this document from inbox_USERNAME
-                                                                DB.collection("inbox_"+spUsername)
-                                                                        .document(d.getId())
-                                                                        .delete()
-                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                            @Override
-                                                                            public void onSuccess(Void aVoid) {
-                                                                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                                                                //Refresh the page
-                                                                                NavHostFragment.findNavController(InboxFragment.this)
-                                                                                        .navigate(R.id.action_inboxFragment_self);
-                                                                            }
-                                                                        })
-                                                                        .addOnFailureListener(new OnFailureListener() {
-                                                                            @Override
-                                                                            public void onFailure(@NonNull Exception e) {
-                                                                                Log.w(TAG, "Error deleting document", e);
-                                                                            }
-                                                                        });
-
-                                                            }).addOnFailureListener(e -> {
-                                                                // Log failure
-                                                                Log.w(TAG, "Error sending reply", e);
-                                                                // Handle error if needed
-                                                                Toast failureMessage = Toast.makeText(requireActivity().getApplicationContext(), "Failure sending reply", Toast.LENGTH_LONG);
-                                                                failureMessage.show();
-                                                            });
-                                                })
-                                                .setNegativeButton("No, thanks", (dialog, which) -> {
-
-                                                })
-                                                .setSingleChoiceItems(choices, 0, (dialog, which) -> {
-
-                                                });
-
-                                        //show the alertdialog
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
-
-                                        //change button colors
-                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.GREEN);
-                                        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
-                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.GRAY);
-                                    }
-                                });
-
-                                //adds the row to the table
-                                tl.addView(tr);
-                            }
+                            //adds the row to the table
+                            tl.addView(tr);
                         }
                     }
                 });
+    }
+
+    // Function to refresh the table after replying or removing a row
+    private void refreshTable() {
+        try {
+            fillTable();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Function to show reply dialog
+    private void showReplyDialog(String username, String docId) {
+
+        //build the alertdialog
+        String[] choices = {"Keep at it!", "Good hustle!", "I'm falling behind!", "Proud of you!"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setTitle("Encourage your friend?")
+                .setPositiveButton("Send", (dialog, which) -> {
+                    int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+
+                    // Extract the selected reply from the choices array based on the user's selection
+                    String reply = choices[selectedPosition];
+                    // Check if the username is null, indicating that the reply action is for all rows
+                    if (username == null) {
+                        // If so, reply to all rows with the selected reply
+                        replyToAllRows(reply);
+                    } else {
+                        // If the username is not null, reply to the specific row with the selected reply
+                        sendReply(username, reply);
+                        // Remove the corresponding row from the table based on its document ID
+                        removeFromTable(docId);
+                    }
+                })
+                .setNegativeButton("No, thanks", null)
+                .setSingleChoiceItems(choices, 0, null);
+
+        //show the alertdialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        //change button colors
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.GREEN);
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.GRAY);
     }
 }
