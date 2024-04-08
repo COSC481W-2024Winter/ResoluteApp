@@ -1,5 +1,8 @@
 package com.example.resoluteapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.resoluteapp.databinding.FragmentReplyBinding;
 import com.example.resoluteapp.databinding.FragmentRequestBinding;
@@ -49,7 +53,15 @@ public class ReplyFragment extends Fragment {
 
         //fill the tablelayout
         try {
-            fillTable();
+            //Only fill table if user is online
+            if(isOnline())
+                fillTable();
+            else {
+                //User is offline. Table is not filled, navigation is added.
+                Toast offlineToast = Toast.makeText(requireActivity().getApplicationContext(), "Offline", Toast.LENGTH_SHORT);
+                offlineToast.show();
+                buttonClicks();
+            }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
@@ -61,15 +73,6 @@ public class ReplyFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        //set navigation functionality for back button
-        binding.toPrevFromReply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(ReplyFragment.this)
-                        .navigate(R.id.action_replyFragment_to_prevActivityFragment);
-            }
-        });
     }
 
     //function to fill the table with data from replies collection
@@ -131,14 +134,42 @@ public class ReplyFragment extends Fragment {
                             tr.addView(tv);
                             tl.addView(tr);
                         }
+                        //Table succeeded, add navigation
+                        buttonClicks();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        //Table failed, add navigation
+                        buttonClicks();
                     }
                 });
+    }
+
+    //Function that sets button's onClick() listeners only when it is convenient
+    public void buttonClicks() {
+        //set navigation functionality for back button
+        binding.toPrevFromReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(ReplyFragment.this)
+                        .navigate(R.id.action_replyFragment_to_prevActivityFragment);
+            }
+        });
+    }
+
+    //Function that returns true if current device is connected to a network
+    public boolean isOnline() {
+        ConnectivityManager connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
+
+        if(networkInfo != null && networkInfo.isConnectedOrConnecting()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     @Override
