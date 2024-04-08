@@ -194,7 +194,7 @@ public class InboxFragment extends Fragment {
 
                                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                                         builder
-                                                .setTitle("Encourage your friend?")
+                                                .setTitle("Encourage your friend!")
                                                 .setPositiveButton("Send", (dialog, which) -> {
                                                     int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
 
@@ -251,7 +251,7 @@ public class InboxFragment extends Fragment {
                                                                 failureMessage.show();
                                                             });
                                                 })
-                                                .setNegativeButton("No, thanks", (dialog, which) -> {
+                                                .setNegativeButton("Cancel", (dialog, which) -> {
 
                                                 })
                                                 .setSingleChoiceItems(choices, 0, (dialog, which) -> {
@@ -263,9 +263,9 @@ public class InboxFragment extends Fragment {
                                         dialog.show();
 
                                         //change button colors
-                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.GREEN);
+                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.rgb(170,246,112));
                                         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
-                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.GRAY);
+                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
                                     }
                                 });
 

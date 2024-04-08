@@ -109,8 +109,8 @@ public class RequestFragment extends Fragment {
                             // Button for approve
                             Button approveButton = new Button(getActivity().getApplicationContext());
                             approveButton.setText(R.string.approve);
-                            approveButton.setTextColor(Color.WHITE);
-                            approveButton.setBackgroundColor(Color.GREEN);
+                            approveButton.setTextColor(Color.BLACK);
+                            approveButton.setBackgroundColor(Color.rgb(170,246,112));
                             approveButton.setPadding(10, 10, 10, 10);
                             approveButton.setWidth(columnWidth);
                             newRow.addView(approveButton);
@@ -167,8 +167,8 @@ public class RequestFragment extends Fragment {
                             // Button for deny
                             Button denyButton = new Button(getActivity().getApplicationContext());
                             denyButton.setText(R.string.deny);
-                            denyButton.setTextColor(Color.WHITE);
-                            denyButton.setBackgroundColor(Color.RED);
+                            denyButton.setTextColor(Color.BLACK);
+                            denyButton.setBackgroundColor(Color.rgb(243,51,51));
                             denyButton.setPadding(10, 10, 10, 10);
                             denyButton.setWidth(columnWidth);
                             newRow.addView(denyButton);

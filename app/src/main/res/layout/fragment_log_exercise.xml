@@ -16,20 +16,38 @@
 
     <!-- Discard Button -->
 
+    <TextView
+        android:id="@+id/login_identifier"
+        android:layout_width="269dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="92dp"
+        android:background="#D8E647"
+        android:fontFamily="sans-serif-black"
+        android:paddingLeft="10dp"
+        android:text="Log Exercise"
+        android:textColor="#0B0A0A"
+        android:textSize="45sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/login_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.275" />
+
     <EditText
         android:id="@+id/editTextExercise"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:gravity="center"
         android:hint="@string/exercise"
+        android:importantForAutofill="no"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.044"
-        android:importantForAutofill="no" />
+        app:layout_constraintVertical_bias="0.301" />
 
     <EditText
         android:id="@+id/editTextUnits"
@@ -37,14 +55,14 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:hint="@string/units"
+        android:importantForAutofill="no"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.378"
-        android:importantForAutofill="no" />
+        app:layout_constraintVertical_bias="0.552" />
 
     <EditText
         android:id="@+id/editTextNumberOfUnits"
@@ -52,49 +70,108 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:hint="@string/amount"
+        android:importantForAutofill="no"
         android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.204"
-        tools:ignore="TextFields"
-        android:importantForAutofill="no" />
-
-    <Button
-        android:id="@+id/log_exercise_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/log_exercise"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.556" />
+        app:layout_constraintVertical_bias="0.428"
+        tools:ignore="TextFields" />
+
+    <Button
+        android:id="@+id/log_exercise_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#56ADFA"
+        android:text="@string/log_exercise"
+        android:textColor="#050505"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.227"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.701" />
 
     <Button
         android:id="@+id/clear_fields"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#C80808"
+        android:backgroundTint="#F33333"
         android:text="@string/clear_fields"
+        android:textColor="#070707"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.696"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.752" />
+        app:layout_constraintVertical_bias="0.701" />
 
     <Button
         android:id="@+id/to_home_from_log_exercise"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#1F7008"
+        android:backgroundTint="#56ADFA"
         android:text="@string/back_to_home"
+        android:textColor="#050505"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.951" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="83dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="56dp"
+        android:src="@drawable/biking"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
+        app:layout_constraintEnd_toStartOf="@+id/editTextExercise"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_identifier" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="105dp"
+        android:layout_height="79dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginBottom="43dp"
+        android:src="@drawable/swimming"
+        app:layout_constraintBottom_toTopOf="@+id/log_exercise_button"
+        app:layout_constraintEnd_toStartOf="@+id/editTextUnits"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="108dp"
+        android:layout_height="84dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="58dp"
+        android:src="@drawable/yoga"
+        app:layout_constraintBottom_toTopOf="@+id/imageView6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextExercise"
+        app:layout_constraintTop_toBottomOf="@+id/login_identifier" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="91dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="39dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="31dp"
+        android:src="@drawable/running"
+        app:layout_constraintBottom_toTopOf="@+id/clear_fields"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextUnits"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 </androidx.constraintlayout.widget.ConstraintLayout>
