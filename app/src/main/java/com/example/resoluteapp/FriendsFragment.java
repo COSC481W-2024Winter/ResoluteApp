@@ -241,6 +241,7 @@ public class FriendsFragment extends Fragment {
                                 tv1.setPadding(10, 10, 10, 10);
                                 tv1.setTextSize(12);
                                 tv1.setWidth(columnWidth);
+                                tv1.setPadding(20,5,0,20);
 
                                 //Adds text view to table row in first column
                                 tr.addView(tv1, 0);
@@ -323,9 +324,9 @@ public class FriendsFragment extends Fragment {
                                         dialog.show();
 
                                         //Change button colors
-                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.GREEN);
+                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.rgb(170,246,112));
                                         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
-                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.GRAY);
+                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
                                     }
                                 });
 

@@ -1,8 +1,11 @@
 package com.example.resoluteapp;
 
+
+import android.graphics.Color;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -111,6 +114,7 @@ public class ReplyFragment extends Fragment {
 
                                 //sets text in tablerow to show replyText
                                 tv.setText(replyText);
+                                tv.setTextColor(Color.BLACK);
 
                                 //add textview to tablerow
                                 tr.addView(tv);
@@ -129,6 +133,7 @@ public class ReplyFragment extends Fragment {
                             TextView tv = new TextView(getActivity().getApplicationContext());
 
                             tv.setText("No replies yet...");
+                            tv.setTextColor(Color.BLACK);
                             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
                             tr.addView(tv);
