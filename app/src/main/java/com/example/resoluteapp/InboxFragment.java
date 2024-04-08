@@ -3,8 +3,11 @@ package com.example.resoluteapp;
 import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -51,7 +54,15 @@ public class InboxFragment extends Fragment {
 
         //calls the fillTable() function when the page is created so it is filled simultaneously
         try {
-            fillTable();
+            //Only fill table if user is online
+            if(isOnline())
+                    fillTable();
+            else {
+                //User is offline. Table is not filled, navigation is added.
+                Toast offlineToast = Toast.makeText(requireActivity().getApplicationContext(), "Offline", Toast.LENGTH_SHORT);
+                offlineToast.show();
+                buttonClicks();
+            }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
@@ -64,33 +75,6 @@ public class InboxFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        //Friends Button
-        binding.toFriendsFromInbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(InboxFragment.this)
-                        .navigate(R.id.action_inboxFragment_to_friendsFragment);
-            }
-        });
-
-        //Home Button
-        binding.toHomeFromInbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(InboxFragment.this)
-                        .navigate(R.id.action_inboxFragment_to_homeFragment);
-            }
-        });
-
-        //Profile Button
-        binding.toProfileFromInbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(InboxFragment.this)
-                        .navigate(R.id.action_inboxFragment_to_profileFragment);
-            }
-        });
     }
 
     @Override
@@ -110,7 +94,6 @@ public class InboxFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
                         //checks that there is currently data to retrieve
                         if (!queryDocumentSnapshots.isEmpty()) {
 
@@ -273,7 +256,59 @@ public class InboxFragment extends Fragment {
                                 tl.addView(tr);
                             }
                         }
+                        //Table succeeded, add navigation
+                        buttonClicks();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Table failed, add navigation
+                        buttonClicks();
                     }
                 });
+    }
+
+    //Function that sets button's onClick() listeners only when it is convenient
+    public void buttonClicks(){
+        //Friends Button
+        binding.toFriendsFromInbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(InboxFragment.this)
+                        .navigate(R.id.action_inboxFragment_to_friendsFragment);
+            }
+        });
+
+        //Home Button
+        binding.toHomeFromInbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(InboxFragment.this)
+                        .navigate(R.id.action_inboxFragment_to_homeFragment);
+            }
+        });
+
+        //Profile Button
+        binding.toProfileFromInbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(InboxFragment.this)
+                        .navigate(R.id.action_inboxFragment_to_profileFragment);
+            }
+        });
+    }
+
+    //Function that returns true if current device is connected to a network
+    public boolean isOnline() {
+        ConnectivityManager connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
+
+        if(networkInfo != null && networkInfo.isConnectedOrConnecting()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

@@ -1,6 +1,9 @@
 package com.example.resoluteapp;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.resoluteapp.databinding.FragmentRequestBinding;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,7 +46,15 @@ public class RequestFragment extends Fragment {
 
         binding = FragmentRequestBinding.inflate(inflater, container, false);
 
-        populateTable();
+        //Only fill table if user is online
+        if(isOnline())
+            populateTable();
+        else {
+            //User is offline. Table is not filled, navigation is added.
+            Toast offlineToast = Toast.makeText(requireActivity().getApplicationContext(), "Offline", Toast.LENGTH_SHORT);
+            offlineToast.show();
+            buttonClicks();
+        }
 
 
         return binding.getRoot();
@@ -51,17 +63,6 @@ public class RequestFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        //Return to Friends List Button
-        binding.toFriendsFromRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(RequestFragment.this)
-                        .navigate(R.id.action_requestFragment_to_friendsFragment);
-
-
-            }
-        });
     }
 
     public void populateTable() {
@@ -200,11 +201,45 @@ public class RequestFragment extends Fragment {
 
 
                 }
+                //Table succeeded, add navigation
+                buttonClicks();
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Table failed, add navigation
+                        buttonClicks();
+                    }
+                });
+
+    }
+
+    //Function that sets button's onClick() listeners only when it is convenient
+    public void buttonClicks(){
+        //Return to Friends List Button
+        binding.toFriendsFromRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(RequestFragment.this)
+                        .navigate(R.id.action_requestFragment_to_friendsFragment);
+
 
             }
         });
+    }
 
+    //Function that returns true if current device is connected to a network
+    public boolean isOnline() {
+        ConnectivityManager connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
 
+        if(networkInfo != null && networkInfo.isConnectedOrConnecting()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     @Override
