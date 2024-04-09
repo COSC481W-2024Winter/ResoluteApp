@@ -8,6 +8,18 @@
     tools:context=".ReplyFragment">
 
     <Button
+        android:id="@+id/delete_exercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:backgroundTint="@color/black"
+        android:text="Delete Exercise"
+        app:layout_constraintBottom_toTopOf="@id/to_prev_from_reply"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/to_prev_from_reply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -136,5 +137,59 @@ public class Inbox_IT {
         Thread.sleep(1000);
         //Check for correct reply from self
         onView(withText("UserR says \"Proud of you!\"")).perform(click());
+    }
+
+    @Test
+    public void checkDeletedExerciseDeletion() throws InterruptedException {
+        onView(withId(R.id.to_home_from_inbox)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_profile_from_home)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.logout_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.login_username_entry)).perform(typeText("UserR"), closeSoftKeyboard());
+        onView(withId(R.id.login_password_entry)).perform(typeText("PasswordR"), closeSoftKeyboard());
+
+        onView(withId(R.id.login_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_log_exercise_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.editTextExercise)).perform(typeText("Inbox delete exercise test"), closeSoftKeyboard());
+        onView(withId(R.id.editTextNumberOfUnits)).perform(typeText("Test"), closeSoftKeyboard());
+        onView(withId(R.id.editTextUnits)).perform(typeText("Test"), closeSoftKeyboard());
+
+        onView(withId(R.id.log_exercise_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_home_from_log_exercise)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_previous_activity_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withText("Inbox delete exercise test")).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.delete_exercise)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_home_from_previous_activity)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_inbox_from_home)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withText("Inbox delete exercise test")).perform(click());
+        Thread.sleep(1000);
+
+        onView(withText("Send")).perform(click());
+        Thread.sleep(1000);
+
+        onView(withText("Inbox delete exercise test")).check(doesNotExist());
     }
 }
