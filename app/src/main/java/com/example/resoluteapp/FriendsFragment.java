@@ -3,8 +3,11 @@ package com.example.resoluteapp;
 import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -56,7 +59,15 @@ public class FriendsFragment extends Fragment {
 
         //Calls fillTable() when page is created so it is filled simultaneously
         try {
-            fillTable();
+            //Only fill table if user is online
+            if(isOnline())
+                fillTable();
+            else {
+                //User is offline. Table is not filled, navigation is added.
+                Toast offlineToast = Toast.makeText(requireActivity().getApplicationContext(), "Offline", Toast.LENGTH_SHORT);
+                offlineToast.show();
+                buttonClicks();
+            }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
@@ -193,42 +204,6 @@ public class FriendsFragment extends Fragment {
                 }
             }
         });
-
-        //To Friend Requests Button
-        binding.toRequestFromFriends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FriendsFragment.this)
-                        .navigate(R.id.action_friendsFragment_to_requestFragment);
-            }
-        });
-
-        //Home Button
-        binding.toHomeFromFriends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FriendsFragment.this)
-                        .navigate(R.id.action_friendsFragment_to_homeFragment);
-            }
-        });
-
-        //Inbox Button
-        binding.toInboxFromFriends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FriendsFragment.this)
-                        .navigate(R.id.action_friendsFragment_to_inboxFragment);
-            }
-        });
-
-        //Profile Button
-        binding.toProfileFromFriends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FriendsFragment.this)
-                        .navigate(R.id.action_friendsFragment_to_profileFragment);
-            }
-        });
     }
 
     //Function to fill  table with data from user's friends collection
@@ -266,6 +241,7 @@ public class FriendsFragment extends Fragment {
                                 tv1.setPadding(10, 10, 10, 10);
                                 tv1.setTextSize(12);
                                 tv1.setWidth(columnWidth);
+                                tv1.setPadding(20,5,0,20);
 
                                 //Adds text view to table row in first column
                                 tr.addView(tv1, 0);
@@ -348,9 +324,9 @@ public class FriendsFragment extends Fragment {
                                         dialog.show();
 
                                         //Change button colors
-                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.GREEN);
+                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.rgb(170,246,112));
                                         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
-                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.GRAY);
+                                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
                                     }
                                 });
 
@@ -358,8 +334,70 @@ public class FriendsFragment extends Fragment {
                                 tl.addView(tr);
                             }
                         }
+
+                        //Table succeeded, add navigation
+                        buttonClicks();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Table failed, add navigation
+                        buttonClicks();
                     }
                 });
+    }
+
+    //Function that sets button's onClick() listeners only when it is convenient
+    public void buttonClicks(){
+        //To Friend Requests Button
+        binding.toRequestFromFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(FriendsFragment.this)
+                        .navigate(R.id.action_friendsFragment_to_requestFragment);
+            }
+        });
+
+        //Home Button
+        binding.toHomeFromFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(FriendsFragment.this)
+                        .navigate(R.id.action_friendsFragment_to_homeFragment);
+            }
+        });
+
+        //Inbox Button
+        binding.toInboxFromFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(FriendsFragment.this)
+                        .navigate(R.id.action_friendsFragment_to_inboxFragment);
+            }
+        });
+
+        //Profile Button
+        binding.toProfileFromFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(FriendsFragment.this)
+                        .navigate(R.id.action_friendsFragment_to_profileFragment);
+            }
+        });
+    }
+
+    //Function that returns true if current device is connected to a network
+    public boolean isOnline() {
+        ConnectivityManager connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
+
+        if(networkInfo != null && networkInfo.isConnectedOrConnecting()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     @Override

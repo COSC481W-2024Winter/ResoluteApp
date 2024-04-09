@@ -24,15 +24,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="#56ADFA"
         android:text="Back"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
-        android:layout_width="324dp"
-        android:layout_height="550dp"
+        android:layout_width="322dp"
+        android:layout_height="484dp"
+        android:layout_marginTop="35dp"
         android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toTopOf="@+id/to_prev_from_reply"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,22 +46,23 @@
         <TableLayout
             android:id="@+id/reply_table_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#ABD5FA">
 
             <TableRow
                 android:id="@+id/header_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#8956E5">
+                android:background="#56ADFA">
 
                 <TextView
                     android:id="@+id/replies"
                     android:layout_width="324dp"
-                    android:background="#FBF089"
+                    android:background="#56ADFA"
                     android:padding="10dip"
-                    android:text="Replies"
+                    android:text="Replies To The Exercise"
                     android:textAlignment="center"
-                    android:textColor="#040303" />
+                    android:textColor="#000000" />
 
             </TableRow>
         </TableLayout>

@@ -15,6 +15,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.resoluteapp.databinding.FragmentPrevActivityBinding;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.collect.Table;
 import com.google.firebase.Timestamp;
@@ -61,15 +62,6 @@ public class PrevActivityFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        //Home Button
-        binding.toHomeFromPreviousActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(PrevActivityFragment.this)
-                        .navigate(R.id.action_prevActivityFragment_to_homeFragment);
-            }
-        });
     }
 
     //function to fill the table with data from exercise collection
@@ -169,8 +161,29 @@ public class PrevActivityFragment extends Fragment {
                                 tl.addView(tr);
                             }
                         }
+                        //Table succeeded, add navigation
+                        buttonClicks();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Table failed, add navigation
+                        buttonClicks();
                     }
                 });
+    }
+
+    //Function that sets button's onClick() listeners only when it is convenient
+    public void buttonClicks(){
+        //Home Button
+        binding.toHomeFromPreviousActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(PrevActivityFragment.this)
+                        .navigate(R.id.action_prevActivityFragment_to_homeFragment);
+            }
+        });
     }
 
     @Override

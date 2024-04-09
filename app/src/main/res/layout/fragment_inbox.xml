@@ -4,26 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InboxFragment" >
+    tools:context=".InboxFragment">
 
     <TextView
         android:id="@+id/inbox_identifier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Inbox (Friends' Exercises)"
-        android:textSize="24sp"
+        android:layout_width="159dp"
+        android:layout_height="36dp"
+        android:background="#D8E647"
+        android:paddingLeft="20dp"
+        android:text="My Inbox"
+        android:textColor="#020202"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.79" />
+        app:layout_constraintVertical_bias="0.123" />
 
     <Button
         android:id="@+id/to_home_from_inbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#56ADFA"
         android:text="Home"
+        android:textColor="#050505"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +40,9 @@
         android:id="@+id/to_friends_from_inbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#56ADFA"
         android:text="Friends"
+        android:textColor="#020202"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/to_home_from_inbox"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +53,9 @@
         android:id="@+id/to_profile_from_inbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#56ADFA"
         android:text="Profile"
+        android:textColor="#040404"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/to_home_from_inbox"
@@ -54,12 +64,12 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="340dp"
+        android:layout_height="418dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="110dp"
+        android:layout_marginBottom="75dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +83,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="26dp"
             android:layout_marginBottom="21dp"
-            android:background="#B191EA"
+            android:background="#ABD5FA"
             android:stretchColumns="0,1,2,3"
             app:layout_constraintBottom_toTopOf="@+id/to_home_from_previous_activity"
             app:layout_constraintTop_toBottomOf="@+id/previous_activity_identifier">
@@ -83,14 +93,14 @@
                 android:id="@+id/header_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#8956E5">
+                android:background="#56ADFA">
 
                 <TextView
                     android:id="@+id/inboxUsernameHeader"
                     android:layout_column="0"
                     android:padding="10dip"
                     android:text="User"
-                    android:textColor="#040303" />
+                    android:textColor="#070707" />
 
                 <TextView
                     android:id="@+id/inboxExerciseHeader"
@@ -128,4 +138,48 @@
                 android:layout_height="match_parent" />
         </TableLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="41dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="-5dp"
+        android:text="Check out all the exercises your friends have logged!"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/textView8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inbox_identifier" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="125dp"
+        android:text="Want to respond to them?"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/textView9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="63dp"
+        android:layout_marginBottom="10dp"
+        android:text="Click on an exercise to send them a message!"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,13 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".RequestFragment">
 
+    <TextView
+        android:id="@+id/inbox_identifier"
+        android:layout_width="267dp"
+        android:layout_height="53dp"
+        android:background="#D8E647"
+        android:paddingLeft="8dp"
+        android:text="Friend Requests"
+        android:textColor="#020202"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
     <Button
         android:id="@+id/to_friends_from_request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
+        android:backgroundTint="#56ADFA"
         android:text="@string/return_to_friends_list"
+        android:textColor="#050000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +59,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="26dp"
             android:layout_marginBottom="21dp"
-            android:background="#B191EA"
+            android:background="#ABD5FA"
             android:stretchColumns="0,1,2"
             app:layout_constraintBottom_toTopOf="@+id/to_home_from_previous_activity"
             app:layout_constraintTop_toBottomOf="@+id/previous_activity_identifier">
@@ -49,7 +68,7 @@
                 android:id="@+id/header_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#8956E5">
+                android:background="#56ADFA">
 
                 <TextView
                     android:id="@+id/requestUsername"
