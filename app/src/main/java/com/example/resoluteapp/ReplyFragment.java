@@ -1,17 +1,24 @@
 package com.example.resoluteapp;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.resoluteapp.databinding.FragmentReplyBinding;
 import com.example.resoluteapp.databinding.FragmentRequestBinding;
@@ -70,6 +77,68 @@ public class ReplyFragment extends Fragment {
                         .navigate(R.id.action_replyFragment_to_prevActivityFragment);
             }
         });
+
+        binding.deleteExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Deletes exercise from user's exercise collection
+                DB.collection("exercises_" + ((MainActivity)getActivity()).getUsername())
+                        .document(exerciseId)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                //Show "Exercise deleted" Toast
+                                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Exercise deleted", Toast.LENGTH_SHORT);
+                                toast.show();
+
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                //Show "Exercise not found" Toast
+                                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Error removing friend", Toast.LENGTH_SHORT);
+                                toast.show();
+
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
+
+                //Deletes documents in replies collection
+                DB.collection("exercises_" + ((MainActivity)getActivity()).getUsername())
+                        .document(exerciseId)
+                        .collection("replies")
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                //Puts all documents into list
+                                List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                                for (DocumentSnapshot d : list) {
+                                    d.getReference().delete();
+                                }
+
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+
+                                //Navigate back to Previous Activity screen
+                                NavHostFragment.findNavController(ReplyFragment.this)
+                                        .navigate(R.id.action_replyFragment_to_prevActivityFragment);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                //Show "Exercise not found" Toast
+                                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Error removing friend", Toast.LENGTH_SHORT);
+                                toast.show();
+
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
+            }
+        });
     }
 
     //function to fill the table with data from replies collection
@@ -116,6 +185,7 @@ public class ReplyFragment extends Fragment {
                                 tl.addView(tr);
                             }
                         }
+
                         //else block takes place if query result is empty
                         else {
                             //finds the table in the fragment_reply.xml
@@ -146,5 +216,4 @@ public class ReplyFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }

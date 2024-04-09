@@ -22,6 +22,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class Reply_IT {
@@ -90,5 +93,60 @@ public class Reply_IT {
         onView(withText("friend2 says \"testreply2\"")).perform(click());
         //Ensure that reply1 no longer exists in this fragment
         onView(withText("friend1 says \"testreply1\"")).check(doesNotExist());
+    }
+
+    //Test to check if an exercise gets deleted
+    @Test
+    public void checkDeletion() throws InterruptedException {
+        onView(withId(R.id.to_home_from_previous_activity)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_profile_from_home)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.logout_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.login_username_entry)).perform(typeText("UserR"), closeSoftKeyboard());
+        onView(withId(R.id.login_password_entry)).perform(typeText("PasswordR"), closeSoftKeyboard());
+
+        onView(withId(R.id.login_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_log_exercise_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.editTextExercise)).perform(typeText("Reply delete exercise test"), closeSoftKeyboard());
+        onView(withId(R.id.editTextNumberOfUnits)).perform(typeText("Test"), closeSoftKeyboard());
+        onView(withId(R.id.editTextUnits)).perform(typeText("Test"), closeSoftKeyboard());
+
+        onView(withId(R.id.log_exercise_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_home_from_log_exercise)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.to_previous_activity_button)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withText("Reply delete exercise test")).perform(click());
+        Thread.sleep(1000);
+
+        onView(withId(R.id.delete_exercise)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withText("Reply delete exercise test")).check(doesNotExist());
+
+        onView(withId(R.id.to_home_from_previous_activity)).perform(click());
+        Thread.sleep(1000);
+
+        //Clears exercise from inbox
+        onView(withId(R.id.to_inbox_from_home)).perform(click());
+        Thread.sleep(1000);
+
+        onView(withText("Reply delete exercise test")).perform(click());
+        Thread.sleep(1000);
+
+        onView(withText("Send")).perform(click());
     }
 }
