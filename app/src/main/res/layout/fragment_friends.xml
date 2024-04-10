@@ -121,7 +121,7 @@
                 android:background="#56ADFA">
 
                 <TextView
-                    android:id="@+id/username"
+                    android:id="@+id/my_friends_row"
                     android:layout_column="0"
                     android:padding="0.03in"
                     android:text="My Friends"
@@ -137,9 +137,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
         </TableLayout>
     </ScrollView>
 
