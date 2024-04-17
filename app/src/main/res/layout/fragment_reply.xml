@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="#DA0000"
         android:text="Delete Exercise"
         app:layout_constraintBottom_toTopOf="@id/to_prev_from_reply"
         app:layout_constraintEnd_toEndOf="parent"
