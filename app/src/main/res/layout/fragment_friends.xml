@@ -9,9 +9,8 @@
     <TextView
         android:id="@+id/new_friends"
         android:layout_width="215dp"
-        android:layout_height="23dp"
-        android:layout_marginTop="250dp"
-        android:layout_marginBottom="-20dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:background="#D8E647"
         android:paddingLeft="8dp"
         android:text="Looking for new friends?"
@@ -19,54 +18,54 @@
         android:textColor="#020202"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/enter_username"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/scrollView3" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
         android:id="@+id/send_request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="-25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="-20dp"
         android:backgroundTint="#56ADFA"
         android:text="Send Request"
         android:textColor="#050000"
         app:layout_constraintBottom_toTopOf="@+id/to_request_from_friends"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enter_username" />
+        app:layout_constraintTop_toTopOf="@id/enter_username" />
 
     <Button
         android:id="@+id/to_request_from_friends"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="-50dp"
+        android:layout_marginBottom="100dp"
         android:backgroundTint="#56ADFA"
         android:text="Pending Friend Requests"
         android:textColor="#040000"
-        app:layout_constraintBottom_toTopOf="@id/to_inbox_from_friends"
+        app:layout_constraintBottom_toTopOf="@+id/send_request"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/send_request" />
+        app:layout_constraintTop_toBottomOf="@id/scrollView3" />
 
     <EditText
         android:id="@+id/enter_username"
         android:layout_width="345dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="-20dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="Enter a username"
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/send_request"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.469"
+        app:layout_constraintHorizontal_bias="0.56"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/new_friends"
+        app:layout_constraintTop_toBottomOf="@id/new_friends"
         tools:ignore="Autofill, LabelFor" />
 
     <TextView
@@ -74,32 +73,32 @@
         android:layout_width="219dp"
         android:layout_height="52dp"
         android:layout_marginTop="32dp"
+        android:layout_marginBottom="15dp"
         android:background="#D8E647"
         android:paddingLeft="8dp"
         android:text="Friends Page"
         android:textColor="#020202"
         android:textSize="35sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.468"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollView3"
-        android:layout_width="311dp"
-        android:layout_height="200dp"
+        android:layout_width="307dp"
+        android:layout_height="189dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="250dp"
-        app:layout_constraintBottom_toBottomOf="@id/new_friends"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="@id/to_inbox_from_friends"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/inbox_identifier"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/to_request_from_friends">
 
         <TableLayout
             android:id="@+id/friends_table"
@@ -128,11 +127,11 @@
                     android:text="My Friends"
                     android:textAlignment="center"
                     android:textColor="@color/black" />
-            </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
@@ -185,12 +184,13 @@
         android:layout_width="188dp"
         android:layout_height="95dp"
         android:layout_marginStart="111dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="112dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/friends_world"
         app:layout_constraintBottom_toTopOf="@+id/new_friends"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
+        app:layout_constraintTop_toBottomOf="@+id/inbox_identifier" />
 </androidx.constraintlayout.widget.ConstraintLayout>
